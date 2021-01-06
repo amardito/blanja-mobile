@@ -4,6 +4,8 @@ import {StatusBar} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {Provider} from 'react-redux';
+import store from './src/global/store';
 
 import {Auth, MainScreen, Detail} from './src/screen';
 
@@ -15,7 +17,7 @@ export default class App extends Component {
   render() {
     const Stack = createStackNavigator();
     return (
-      <>
+      <Provider store={store}>
         <StatusBar
           translucent={true}
           backgroundColor="transparent"
@@ -75,7 +77,7 @@ export default class App extends Component {
             />
           </Stack.Navigator>
         </NavigationContainer>
-      </>
+      </Provider>
     );
   }
 }
