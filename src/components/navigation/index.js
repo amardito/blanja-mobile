@@ -1,11 +1,20 @@
 import React, {Component} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {connect} from 'react-redux';
+import {
+  getNewProductAction,
+  getPopularProductAction,
+} from '../../global/ActionCreators/product';
 
 import {Home, Profile} from '../../screen';
 
-export default class main extends Component {
+class main extends Component {
+  componentDidMount = () => {
+    this.props.dispatch(getNewProductAction());
+    this.props.dispatch(getPopularProductAction());
+  };
+
   render() {
     const Tab = createBottomTabNavigator();
     return (
@@ -42,3 +51,11 @@ export default class main extends Component {
     );
   }
 }
+
+const mapStateToProps = ({product}) => {
+  return {
+    product,
+  };
+};
+
+export default connect(mapStateToProps)(main);

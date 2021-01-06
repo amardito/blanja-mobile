@@ -1,16 +1,13 @@
 import React, {Component} from 'react';
 import {View, Image, ScrollView, Text, TouchableOpacity} from 'react-native';
 import Card from '../components/card/cardGrid';
+import {connect} from 'react-redux';
 
 import s from '../styles/homeStyles';
 
-export default class home extends Component {
-  constructor() {
-    super();
-  }
-
-  componentDidMount() {}
+class home extends Component {
   render() {
+    const {newProduct, popularProduct} = this.props.product;
     return (
       <ScrollView horizontal={false}>
         <View style={s.headerHome}>
@@ -36,7 +33,31 @@ export default class home extends Component {
 
         <View style={s.listItems}>
           <ScrollView horizontal={true}>
-            <Card {...this.props} />
+            {newProduct.values &&
+              newProduct.values.map(
+                ({
+                  id_product,
+                  product_img,
+                  product_sold,
+                  product_by,
+                  product_name,
+                  product_price,
+                }) => (
+                  <Card
+                    {...this.props}
+                    key={id_product}
+                    id={id_product}
+                    image={`http://18.233.157.119:8000${
+                      product_img.split(',')[0]
+                    }`}
+                    sold={product_sold}
+                    owner={product_by}
+                    name={product_name}
+                    price={product_price}
+                    badge={'NEW'}
+                  />
+                ),
+              )}
             <View style={s.lastItems} />
           </ScrollView>
         </View>
@@ -53,7 +74,31 @@ export default class home extends Component {
 
         <View style={s.listItems}>
           <ScrollView horizontal={true}>
-            <Card {...this.props} />
+            {popularProduct.values &&
+              popularProduct.values.map(
+                ({
+                  id_product,
+                  product_img,
+                  product_sold,
+                  product_by,
+                  product_name,
+                  product_price,
+                }) => (
+                  <Card
+                    {...this.props}
+                    key={id_product}
+                    id={id_product}
+                    image={`http://18.233.157.119:8000${
+                      product_img.split(',')[0]
+                    }`}
+                    sold={product_sold}
+                    owner={product_by}
+                    name={product_name}
+                    price={product_price}
+                    badge={false}
+                  />
+                ),
+              )}
             <View style={s.lastItems} />
           </ScrollView>
         </View>
@@ -63,3 +108,11 @@ export default class home extends Component {
     );
   }
 }
+
+const mapStateToProps = ({product}) => {
+  return {
+    product,
+  };
+};
+
+export default connect(mapStateToProps)(home);

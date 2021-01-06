@@ -9,6 +9,10 @@ import {authLoginAction} from '../../global/ActionCreators/auth';
 
 import s from '../../styles/authStyle';
 
+const api = axios.create({
+  baseURL: 'http://18.233.157.119:8000/api/v1/',
+});
+
 class signin extends Component {
   constructor() {
     super();
@@ -48,8 +52,8 @@ class signin extends Component {
 
       console.log('getting user data...');
 
-      await axios
-        .post('http://18.233.157.119:8000/api/v1/auth/login', payload, {
+      await api
+        .post('auth/login', payload, {
           headers: {
             'Content-Type': 'application/json',
           },

@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 const isLogin = async () => {
   try {
     console.log('initializing token: ');
-    console.log(await AsyncStorage.getItem('token'));
+    // console.log(await AsyncStorage.getItem('token'));
     const item = (await AsyncStorage.getItem('token')) === null ? false : true;
     return item;
   } catch (error) {

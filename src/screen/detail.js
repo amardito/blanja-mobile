@@ -24,10 +24,11 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/Fontisto';
 import Card from '../components/card/cardGrid';
 import {BoxShadow} from 'react-native-shadow';
+import {connect} from 'react-redux';
 
 import s from '../styles/detailStyle';
 
-export default class detail extends Component {
+class detail extends Component {
   constructor() {
     super();
     this.state = {
@@ -49,6 +50,34 @@ export default class detail extends Component {
       y: -4,
       // style: {marginVertical: 5},
     };
+    const {
+      // id_product,
+      product_img,
+      product_name,
+      product_by,
+      product_price,
+      product_sold,
+      product_desc,
+    } =
+      this.props.product.singleProduct &&
+      this.props.product.singleProduct.product;
+
+    const {color, size} =
+      this.props.product.singleProduct && this.props.product.singleProduct;
+
+    const colorItems = [];
+    color !== undefined &&
+      color.map(({color_id, color}) => {
+        const payload = {label: color, value: color_id};
+        return colorItems.push(payload);
+      });
+
+    const sizeItems = [];
+    size !== undefined &&
+      size.map(({size_id, size}) => {
+        const payload = {label: size, value: size_id};
+        return sizeItems.push(payload);
+      });
     return (
       <>
         <Header style={s.header}>
@@ -71,7 +100,7 @@ export default class detail extends Component {
             </Button>
           </Left>
           <Body>
-            <Title style={{color: '#888'}}>Detail</Title>
+            <Title style={{color: '#888'}}>{product_by}</Title>
           </Body>
           <Right>
             <Button transparent>
@@ -85,44 +114,39 @@ export default class detail extends Component {
         </Header>
         <ScrollView style={{backgroundColor: '#fcfcfc'}}>
           <ScrollView horizontal={true}>
-            <View style={s.imageItems}>
-              <Image
-                source={{
-                  uri:
-                    'https://s3-alpha-sig.figma.com/img/ff9f/e689/5f92a300e886114d2dde23fbe28ad1be?Expires=1610928000&Signature=SoQmY-9R14Q5WhqCqIXBsYkvnpjalsARFziZOmM93U~k1LU~BzxJkrPCjNuG0iTmGJhm8k8vDHvqYWSbUfx76E-8gTMHzhF-okI4CursL~yqUfG2yBKAYN~icBNILdYNrV9LJXyqrk2U1HloVZx1UqWfC4KA9YEL~zWXjYDeUQof7dMiIeREHuaj4MjtMcwYyjTjyzs0a-WWY0-6bbUW34xQ207HKLhdF8aBo29TtivjqaZqyHuxN9GM-fePDAXB0JHmjdVXNYpHR1FGSlXn8avzK3vBUXMzc~sov4pW469OASilIz6irZp7tDNW4GSVbwGxAiLn0EgLKKv80lzjwA__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA',
-                }}
-                style={s.image}
-              />
-            </View>
-            <View style={s.imageItems}>
-              <Image
-                source={{
-                  uri:
-                    'https://s3-alpha-sig.figma.com/img/ff9f/e689/5f92a300e886114d2dde23fbe28ad1be?Expires=1610928000&Signature=SoQmY-9R14Q5WhqCqIXBsYkvnpjalsARFziZOmM93U~k1LU~BzxJkrPCjNuG0iTmGJhm8k8vDHvqYWSbUfx76E-8gTMHzhF-okI4CursL~yqUfG2yBKAYN~icBNILdYNrV9LJXyqrk2U1HloVZx1UqWfC4KA9YEL~zWXjYDeUQof7dMiIeREHuaj4MjtMcwYyjTjyzs0a-WWY0-6bbUW34xQ207HKLhdF8aBo29TtivjqaZqyHuxN9GM-fePDAXB0JHmjdVXNYpHR1FGSlXn8avzK3vBUXMzc~sov4pW469OASilIz6irZp7tDNW4GSVbwGxAiLn0EgLKKv80lzjwA__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA',
-                }}
-                style={s.image}
-              />
-            </View>
+            {product_img !== undefined &&
+              product_img.map((value, index) => (
+                <View style={s.imageItems}>
+                  <Image
+                    key={index}
+                    source={{
+                      uri: `http://18.233.157.119:8000${value}`,
+                    }}
+                    style={s.image}
+                  />
+                </View>
+              ))}
           </ScrollView>
 
           <View style={{paddingHorizontal: 16}}>
             <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                // paddingRight: 0,
+              }}>
               <DropDownPicker
                 placeholder="Size"
                 placeholderStyle={{
                   fontWeight: '600',
                   color: '#333',
                 }}
-                items={[
-                  {label: 'M', value: 'm'},
-                  {label: 'L', value: 'l'},
-                  {label: 'XL', value: 'xl'},
-                ]}
+                items={sizeItems}
                 defaultValue={this.state.size}
-                containerStyle={{height: 60, width: 150}}
+                containerStyle={{height: 60, width: 145}}
                 style={{
                   marginTop: 12,
+                  width: '90%',
                   borderColor: this.state.size !== null ? 'red' : 'dimgray',
                 }}
                 arrowColor={this.state.size !== null ? 'black' : 'dimgray'}
@@ -135,6 +159,7 @@ export default class detail extends Component {
                 dropDownStyle={{
                   backgroundColor: '#fff',
                   marginTop: 10,
+                  width: '90%',
                   paddingVertical: 0,
                   paddingHorizontal: 0,
                 }}
@@ -153,15 +178,12 @@ export default class detail extends Component {
                   fontWeight: '600',
                   color: '#333',
                 }}
-                items={[
-                  {label: 'Black', value: 'black'},
-                  {label: 'Red', value: 'red'},
-                  {label: 'Green', value: 'green'},
-                ]}
+                items={colorItems}
                 defaultValue={this.state.color}
-                containerStyle={{height: 60, width: 150}}
+                containerStyle={{height: 60, width: 145}}
                 style={{
                   marginTop: 12,
+                  width: '90%',
                   borderColor: this.state.color !== null ? 'red' : 'dimgray',
                 }}
                 arrowColor={this.state.color !== null ? 'black' : 'dimgray'}
@@ -174,6 +196,7 @@ export default class detail extends Component {
                 dropDownStyle={{
                   backgroundColor: '#fff',
                   marginTop: 10,
+                  width: '90%',
                   paddingVertical: 0,
                   paddingHorizontal: 0,
                 }}
@@ -217,16 +240,29 @@ export default class detail extends Component {
               style={{
                 marginTop: 22,
                 flexDirection: 'row',
-                justifyContent: 'space-between',
               }}>
-              <View>
-                <Text style={{fontSize: 24, fontWeight: 'bold'}}>H&M</Text>
-                <Text style={{fontSize: 12, color: 'grey'}}>
-                  Short black dress
+              <View style={{width: '60%'}}>
+                <Text
+                  style={{fontSize: 24, fontWeight: 'bold', paddingRight: 8}}>
+                  {product_name}
                 </Text>
+                <Text style={{fontSize: 18, color: 'grey'}}>{product_by}</Text>
               </View>
-              <Text style={{fontSize: 24, fontWeight: 'bold'}}>
-                IDR 100,000
+              <Text
+                style={{
+                  fontSize: 24,
+                  fontWeight: 'bold',
+                  width: '40%',
+                  textAlign: 'right',
+                }}>
+                IDR{' '}
+                {Number(product_price)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',') === 'NaN'
+                  ? 0
+                  : Number(product_price)
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
               </Text>
             </View>
             <View style={{flexDirection: 'row', marginVertical: 5}}>
@@ -256,16 +292,11 @@ export default class detail extends Component {
                 size={18}
               />
               <Text style={{fontSize: 13, marginLeft: 3, color: '#9B9B9B'}}>
-                (0)
+                ({product_sold})
               </Text>
             </View>
             <View>
-              <Text>
-                Short dress in soft cotton jersey with decorative buttons down
-                the front and a wide, frill-trimmed square neckline with
-                concealed elastication. Elasticated seam under the bust and
-                short puff sleeves with a small frill trim.
-              </Text>
+              <Text style={{fontSize: 18}}>{product_desc}</Text>
             </View>
           </View>
           <View
@@ -283,7 +314,7 @@ export default class detail extends Component {
           </View>
           <View style={s.listItems}>
             <ScrollView horizontal={true}>
-              <Card {...this.props} />
+              <Card {...this.props} badge={false} />
               <Card {...this.props} />
               <Card {...this.props} />
               <View style={s.lastItems} />
@@ -324,3 +355,11 @@ export default class detail extends Component {
     );
   }
 }
+
+const mapStateToProps = ({product}) => {
+  return {
+    product,
+  };
+};
+
+export default connect(mapStateToProps)(detail);
