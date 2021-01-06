@@ -4,9 +4,8 @@ import {StatusBar} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-// import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import {Home, Auth} from './src/screen';
+import {Auth, MainScreen, Detail} from './src/screen';
 
 export default class App extends Component {
   componentDidMount = () => {
@@ -14,7 +13,6 @@ export default class App extends Component {
   };
 
   render() {
-    // const Tab = createBottomTabNavigator();
     const Stack = createStackNavigator();
     return (
       <>
@@ -24,21 +22,28 @@ export default class App extends Component {
           barStyle="dark-content"
         />
         <NavigationContainer>
-          {/* <Tab.Navigator>
-            <Tab.Screen name="Home" component={HomeScreen} />
-            <Tab.Screen name="Shop" component={ShopScreen} />
-            <Tab.Screen name="Bag" component={ShopScreen} />
-            <Tab.Screen name="Favorites" component={ShopScreen} />
-            <Tab.Screen name="Profile" component={ShopScreen} />
-          </Tab.Navigator> */}
           <Stack.Navigator>
             <Stack.Screen
-              name="Home"
-              component={Home}
+              name="mainscreen"
+              component={MainScreen}
               options={{headerShown: false}}
             />
+
             <Stack.Screen
-              name="Signin"
+              name="signup"
+              component={Auth.SignUp}
+              options={{
+                title: '',
+                headerStyle: {
+                  elevation: 0,
+                  shadowOpacity: 0,
+                  borderBottomWidth: 0,
+                  backgroundColor: 'transparent',
+                },
+              }}
+            />
+            <Stack.Screen
+              name="signin"
               component={Auth.SignIn}
               options={{
                 title: '',
@@ -51,8 +56,8 @@ export default class App extends Component {
               }}
             />
             <Stack.Screen
-              name="Signup"
-              component={Auth.SignUp}
+              name="forgotpass"
+              component={Auth.ForgotPass}
               options={{
                 title: '',
                 headerStyle: {
@@ -62,6 +67,11 @@ export default class App extends Component {
                   backgroundColor: 'transparent',
                 },
               }}
+            />
+            <Stack.Screen
+              name="detail"
+              component={Detail}
+              options={{headerShown: false}}
             />
           </Stack.Navigator>
         </NavigationContainer>
