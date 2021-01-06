@@ -35,7 +35,7 @@ export default class signup extends Component {
               <View style={s.formAction}>
                 <TouchableOpacity
                   onPress={() => {
-                    this.props.navigation.navigate('Signin');
+                    this.props.navigation.navigate('signin');
                   }}>
                   <Text>Already have an account ?</Text>
                 </TouchableOpacity>

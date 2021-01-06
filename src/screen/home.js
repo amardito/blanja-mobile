@@ -5,6 +5,11 @@ import Card from '../components/card/cardGrid';
 import s from '../styles/homeStyles';
 
 export default class home extends Component {
+  constructor() {
+    super();
+  }
+
+  componentDidMount() {}
   render() {
     return (
       <ScrollView horizontal={false}>
