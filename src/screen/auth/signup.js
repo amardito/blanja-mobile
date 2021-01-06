@@ -8,28 +8,30 @@ export default class signup extends Component {
   render() {
     return (
       <View style={s.containerFull}>
-        <Text style={s.headerText}> Sign Up </Text>
         <ScrollView>
+          <Text style={s.headerText}> Sign Up </Text>
           <Container style={s.formInput}>
             <Form>
-              <View style={s.inputBox}>
-                <Item stackedLabel>
-                  <Label>Username</Label>
-                  <Input style={s.inputStyle} />
-                </Item>
-              </View>
-              <View style={s.inputBox}>
-                <Item stackedLabel>
-                  <Label>Email</Label>
-                  <Input style={s.inputStyle} />
-                </Item>
-              </View>
-              <View style={s.inputBox}>
-                <Item stackedLabel>
-                  <Label>Password</Label>
-                  <Input style={s.inputStyle} />
-                </Item>
-              </View>
+              <Item floatingLabel style={s.inputBox}>
+                <Label style={s.labelStyle} floatBack={3}>
+                  Username
+                </Label>
+                <Input style={s.inputStyle} />
+              </Item>
+
+              <Item floatingLabel style={s.inputBox}>
+                <Label style={s.labelStyle} floatBack={3}>
+                  Email
+                </Label>
+                <Input style={s.inputStyle} />
+              </Item>
+
+              <Item floatingLabel style={s.inputBox}>
+                <Label style={s.labelStyle} floatBack={3}>
+                  Password
+                </Label>
+                <Input style={s.inputStyle} />
+              </Item>
               <View style={s.formAction}>
                 <TouchableOpacity
                   onPress={() => {
