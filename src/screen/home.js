@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
-import {View, Image, ScrollView} from 'react-native';
+import {View, Image, ScrollView, Text, TouchableOpacity} from 'react-native';
+import Card from '../components/card/cardGrid';
 
 import s from '../styles/homeStyles';
 
 export default class home extends Component {
   render() {
     return (
-      <ScrollView>
-        <View style={s.containerFull}>
+      <ScrollView horizontal={false}>
+        <View style={s.headerHome}>
           <Image
             source={{
               uri:
@@ -15,7 +16,44 @@ export default class home extends Component {
             }}
             style={s.imageHeader}
           />
+          <Text style={s.textHeader}>Street clothes</Text>
         </View>
+
+        <View style={s.headerContent}>
+          <Text style={s.textSubHeader}>New</Text>
+          <View style={s.textSpan}>
+            <Text>You've never seen it before!</Text>
+            <TouchableOpacity>
+              <Text>View all</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View style={s.listItems}>
+          <ScrollView horizontal={true}>
+            <Card {...this.props} />
+            <View style={s.lastItems} />
+          </ScrollView>
+        </View>
+
+        <View style={s.headerContent}>
+          <Text style={s.textSubHeader}>Popular</Text>
+          <View style={s.textSpan}>
+            <Text>Tranding items</Text>
+            <TouchableOpacity>
+              <Text>View all</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View style={s.listItems}>
+          <ScrollView horizontal={true}>
+            <Card {...this.props} />
+            <View style={s.lastItems} />
+          </ScrollView>
+        </View>
+
+        <View style={s.lastContent} />
       </ScrollView>
     );
   }
