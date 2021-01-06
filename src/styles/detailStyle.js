@@ -28,10 +28,14 @@ const detailStyle = StyleSheet.create({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginBottom: 50,
-    paddingRight: 15,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+  lastItems: {
+    marginRight: 15,
+  },
+  lastContent: {
+    marginBottom: 20,
   },
 });
 

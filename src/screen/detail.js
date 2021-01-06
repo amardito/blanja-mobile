@@ -7,6 +7,7 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import {
   Header,
@@ -22,6 +23,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/Fontisto';
 import Card from '../components/card/cardGrid';
+import {BoxShadow} from 'react-native-shadow';
 
 import s from '../styles/detailStyle';
 
@@ -36,6 +38,17 @@ export default class detail extends Component {
   }
 
   render() {
+    const shadowOpt = {
+      width: Dimensions.get('window').width,
+      height: 60,
+      color: '#000',
+      border: 2,
+      radius: 5,
+      opacity: 0.2,
+      x: 0,
+      y: -4,
+      // style: {marginVertical: 5},
+    };
     return (
       <>
         <Header style={s.header}>
@@ -112,7 +125,7 @@ export default class detail extends Component {
                   marginTop: 12,
                   borderColor: this.state.size !== null ? 'red' : 'dimgray',
                 }}
-                arrowColor={this.state.size !== null ? 'red' : 'dimgray'}
+                arrowColor={this.state.size !== null ? 'black' : 'dimgray'}
                 itemStyle={{
                   justifyContent: 'center',
                 }}
@@ -126,8 +139,8 @@ export default class detail extends Component {
                   paddingHorizontal: 0,
                 }}
                 activeItemStyle={{backgroundColor: '#f0f0f0'}}
-                activeLabelStyle={{color: 'red'}}
-                selectedLabelStyle={{color: 'red'}}
+                activeLabelStyle={{color: 'black'}}
+                selectedLabelStyle={{color: 'black'}}
                 onChangeItem={(item) =>
                   this.setState({
                     size: item.value,
@@ -151,7 +164,7 @@ export default class detail extends Component {
                   marginTop: 12,
                   borderColor: this.state.color !== null ? 'red' : 'dimgray',
                 }}
-                arrowColor={this.state.color !== null ? 'red' : 'dimgray'}
+                arrowColor={this.state.color !== null ? 'black' : 'dimgray'}
                 itemStyle={{
                   justifyContent: 'center',
                 }}
@@ -165,8 +178,8 @@ export default class detail extends Component {
                   paddingHorizontal: 0,
                 }}
                 activeItemStyle={{backgroundColor: '#f0f0f0'}}
-                activeLabelStyle={{color: 'red'}}
-                selectedLabelStyle={{color: 'red'}}
+                activeLabelStyle={{color: 'black'}}
+                selectedLabelStyle={{color: 'black'}}
                 onChangeItem={(item) =>
                   this.setState({
                     color: item.value,
@@ -190,6 +203,7 @@ export default class detail extends Component {
                     borderWidth: 1,
                     borderRadius: 16,
                     backgroundColor: '#ffffff',
+                    elevation: 4,
                   }}>
                   {this.state.like ? (
                     <Icon name="heart" color={'red'} />
@@ -268,36 +282,43 @@ export default class detail extends Component {
             <Text style={{fontSize: 11, color: 'grey'}}>12 items</Text>
           </View>
           <View style={s.listItems}>
-            <Card {...this.props} />
-            <Card {...this.props} />
-            <Card {...this.props} />
-            <Card {...this.props} />
+            <ScrollView horizontal={true}>
+              <Card {...this.props} />
+              <Card {...this.props} />
+              <Card {...this.props} />
+              <View style={s.lastItems} />
+            </ScrollView>
           </View>
+          <View style={s.lastContent} />
         </ScrollView>
+
         <Footer
           style={{
             height: 60,
             width: '100%',
             justifyContent: 'center',
             alignItems: 'center',
+            backgroundColor: 'transparent',
           }}>
-          <FooterTab style={{backgroundColor: 'white'}}>
-            <Button>
-              <TouchableOpacity>
-                <View
-                  style={{
-                    height: 48,
-                    width: 343,
-                    borderRadius: 25,
-                    backgroundColor: '#DB3022',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <Text style={{color: 'white'}}>ADD TO CART</Text>
-                </View>
-              </TouchableOpacity>
-            </Button>
-          </FooterTab>
+          <BoxShadow setting={shadowOpt}>
+            <FooterTab style={{backgroundColor: 'white'}}>
+              <Button>
+                <TouchableOpacity>
+                  <View
+                    style={{
+                      height: 48,
+                      width: 343,
+                      borderRadius: 25,
+                      backgroundColor: '#DB3022',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                    }}>
+                    <Text style={{color: 'white'}}>ADD TO CART</Text>
+                  </View>
+                </TouchableOpacity>
+              </Button>
+            </FooterTab>
+          </BoxShadow>
         </Footer>
       </>
     );

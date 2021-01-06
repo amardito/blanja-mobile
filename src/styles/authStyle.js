@@ -20,13 +20,6 @@ const authStyle = StyleSheet.create({
   },
   inputBox: {
     backgroundColor: '#ffffff',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
     elevation: 6,
     borderRadius: 8,
     marginLeft: 0,
@@ -58,13 +51,6 @@ const authStyle = StyleSheet.create({
     height: 80,
   },
   buttonStyle: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
     elevation: 6,
   },
   whiteText: {
