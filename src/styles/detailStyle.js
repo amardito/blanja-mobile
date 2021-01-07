@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 
 const detailStyle = StyleSheet.create({
   header: {
-    marginTop: 25,
+    marginTop: 30,
     paddingVertical: 0,
     backgroundColor: '#fff',
   },

@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {
@@ -116,9 +117,8 @@ class detail extends Component {
           <ScrollView horizontal={true}>
             {product_img !== undefined &&
               product_img.map((value, index) => (
-                <View style={s.imageItems}>
+                <View style={s.imageItems} key={index}>
                   <Image
-                    key={index}
                     source={{
                       uri: `http://18.233.157.119:8000${value}`,
                     }}

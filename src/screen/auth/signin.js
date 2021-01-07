@@ -22,7 +22,9 @@ class signin extends Component {
       errMsg: '',
     };
     this._storeData = async (token) => {
-      console.log('succes login, storing token ...');
+      console.log(`\n
+      succes login, storing token ...
+      `);
       try {
         await AsyncStorage.setItem('token', token);
       } catch (error) {
@@ -50,7 +52,9 @@ class signin extends Component {
         level: 1,
       });
 
-      console.log('getting user data...');
+      console.log(`\n
+      getting user data...
+      `);
 
       await api
         .post('auth/login', payload, {
