@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {ScrollView, Text, View} from 'react-native';
 import {Container, Form, Item, Input, Label, Button} from 'native-base';
 
 import s from '../../styles/authStyle';

@@ -7,7 +7,7 @@ import {
   getPopularProductAction,
 } from '../../global/ActionCreators/product';
 
-import {Home, Profile} from '../../screen';
+import {Home, Profile, MyBag} from '../../screen';
 
 class main extends Component {
   componentDidMount = () => {
@@ -30,6 +30,20 @@ class main extends Component {
             tabBarLabel: 'Home',
             tabBarIcon: ({color, size}) => (
               <MaterialCommunityIcons name="home" color={color} size={size} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="mybag"
+          component={MyBag}
+          options={{
+            tabBarLabel: 'Bag',
+            tabBarIcon: ({color, size}) => (
+              <MaterialCommunityIcons
+                name="shopping"
+                color={color}
+                size={size}
+              />
             ),
           }}
         />
