@@ -1,6 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {StatusBar, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 import {connect} from 'react-redux';
@@ -22,7 +28,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import s from '../styles/profileStyle';
 
 const api = axios.create({
-  baseURL: 'http://18.233.157.119:8000/api/v1/',
+  baseURL: 'http://192.168.1.6:1010/api/v1/',
 });
 
 class profile extends Component {
@@ -34,15 +40,16 @@ class profile extends Component {
     };
     this._auth = async () => {
       console.log(`\n
-      try access profile screen, Validating token:
+      try access profile screen, Validating auth:
       `);
       try {
-        auth.isLogin._W || auth.isLogin
-          ? console.log('sucess')
-          : navigation.reset({
+        auth.isLogin
+          ? (console.log('      success'), this.getToken())
+          : (console.log('      failed'),
+            navigation.reset({
               index: 0,
               routes: [{name: 'mainscreen'}, {name: 'signup'}],
-            });
+            }));
       } catch (error) {
         // Error get data
         console.log(error);
@@ -52,12 +59,12 @@ class profile extends Component {
 
   getToken = async () => {
     try {
-      console.log(`\n
-      getting token ... 
-      `);
-      // console.log(await AsyncStorage.getItem('token'));
       let item = await AsyncStorage.getItem('token');
       item = await JSON.parse(item);
+      console.log(`
+      getting token ... \n
+      ${item.token}
+      `);
       // console.log(typeof item);
       this.setState({
         token: item,
@@ -69,13 +76,13 @@ class profile extends Component {
   };
 
   logoutHandle = async () => {
-    const {token} = JSON.parse(await AsyncStorage.getItem('token'));
+    const {token} = this.state;
     console.log(token);
     await api
       .post('auth/logout', null, {
         headers: {
           'Content-Length': '0',
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token.token}`,
         },
       })
       .then(async () => {
@@ -95,12 +102,10 @@ class profile extends Component {
   };
 
   componentDidMount = async () => {
-    await this._auth();
-    this.getToken();
+    this._auth();
   };
 
   render() {
-    console.log(this.props.auth.isLogin);
     const {username, email} = this.state.token !== null && this.state.token;
     const ImageProfile = undefined;
     return (
@@ -133,103 +138,110 @@ class profile extends Component {
             </Button>
           </Right>
         </Header>
-        <Text style={s.textHeader}>My Profile</Text>
+        <ScrollView>
+          <Text style={s.textHeader}>My Profile</Text>
 
-        <Card transparent style={s.profile}>
-          <CardItem style={{backgroundColor: 'transparent'}}>
-            <Left>
-              {ImageProfile !== undefined ? (
-                <Thumbnail large source={{uri: ImageProfile}} />
-              ) : (
+          <Card transparent style={s.profile}>
+            <CardItem style={{backgroundColor: 'transparent'}}>
+              <Left>
+                {ImageProfile !== undefined ? (
+                  <Thumbnail large source={{uri: ImageProfile}} />
+                ) : (
+                  <MaterialCommunityIcons
+                    name="account"
+                    color={'#888'}
+                    size={50}
+                  />
+                )}
+                <Body>
+                  <Text style={s.profileName}>{username}</Text>
+                  <Text note>{email}</Text>
+                </Body>
+              </Left>
+            </CardItem>
+          </Card>
+
+          <View style={{padding: 14}}>
+            <TouchableOpacity
+              onPress={() => {
+                // navigation.navigate('MyOrder')
+              }}>
+              <View style={s.accordian}>
+                <View>
+                  <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+                    My Order
+                  </Text>
+                  <Text style={{color: 'grey'}}>Already have 12 orders</Text>
+                </View>
                 <MaterialCommunityIcons
-                  name="account"
+                  name="chevron-right"
                   color={'#888'}
-                  size={50}
+                  size={35}
                 />
-              )}
-              <Body>
-                <Text style={s.profileName}>{username}</Text>
-                <Text note>{email}</Text>
-              </Body>
-            </Left>
-          </CardItem>
-        </Card>
-
-        <View style={{padding: 14}}>
-          <TouchableOpacity
-            onPress={() => {
-              // navigation.navigate('MyOrder')
-            }}>
-            <View style={s.accordian}>
-              <View>
-                <Text style={{fontSize: 16, fontWeight: 'bold'}}>My Order</Text>
-                <Text style={{color: 'grey'}}>Already have 12 orders</Text>
               </View>
-              <MaterialCommunityIcons
-                name="chevron-right"
-                color={'#888'}
-                size={35}
-              />
-            </View>
-          </TouchableOpacity>
-          <View style={s.line} />
-          <TouchableOpacity
-            onPress={() => {
-              // navigation.navigate('ShippingAddress')
-            }}>
-            <View style={s.accordian}>
-              <View>
-                <Text style={{fontSize: 16, fontWeight: 'bold'}}>
-                  Shipping Address
-                </Text>
-                <Text style={{color: 'grey'}}>3 Address</Text>
+            </TouchableOpacity>
+            <View style={s.line} />
+            <TouchableOpacity
+              onPress={() => {
+                // navigation.navigate('ShippingAddress')
+              }}>
+              <View style={s.accordian}>
+                <View>
+                  <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+                    Shipping Address
+                  </Text>
+                  <Text style={{color: 'grey'}}>3 Address</Text>
+                </View>
+                <MaterialCommunityIcons
+                  name="chevron-right"
+                  color={'#888'}
+                  size={35}
+                />
               </View>
-              <MaterialCommunityIcons
-                name="chevron-right"
-                color={'#888'}
-                size={35}
-              />
-            </View>
-          </TouchableOpacity>
-          <View style={s.line} />
-          <TouchableOpacity
-            onPress={() => {
-              // navigation.navigate('Setting')
-            }}>
-            <View style={s.accordian}>
-              <View>
-                <Text style={{fontSize: 16, fontWeight: 'bold'}}>Setting</Text>
-                <Text style={{color: 'grey'}}>Notification, password</Text>
+            </TouchableOpacity>
+            <View style={s.line} />
+            <TouchableOpacity
+              onPress={() => {
+                // navigation.navigate('Setting')
+              }}>
+              <View style={s.accordian}>
+                <View>
+                  <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+                    Setting
+                  </Text>
+                  <Text style={{color: 'grey'}}>Notification, password</Text>
+                </View>
+                <MaterialCommunityIcons
+                  name="chevron-right"
+                  color={'#888'}
+                  size={35}
+                />
               </View>
-              <MaterialCommunityIcons
-                name="chevron-right"
-                color={'#888'}
-                size={35}
-              />
-            </View>
-          </TouchableOpacity>
-          <View style={s.line} />
-        </View>
-        <TouchableOpacity
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: 55,
-          }}
-          onPress={() => this.logoutHandle()}>
-          <View
-            style={{
-              height: 48,
-              width: 300,
-              borderRadius: 25,
-              backgroundColor: '#DB3022',
-              justifyContent: 'center',
-              alignItems: 'center',
-              elevation: 5,
-            }}>
-            <Text style={{color: 'white', fontWeight: '700'}}>LOGOUT</Text>
+            </TouchableOpacity>
+            <View style={s.line} />
           </View>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: 55,
+              marginBottom: 40,
+            }}
+            onPress={() => this.logoutHandle()}>
+            <View
+              style={{
+                height: 48,
+                width: 300,
+                borderRadius: 25,
+                backgroundColor: '#DB3022',
+                justifyContent: 'center',
+                alignItems: 'center',
+                elevation: 5,
+              }}>
+              <Text style={{color: 'white', fontWeight: '700'}}>LOGOUT</Text>
+            </View>
+          </TouchableOpacity>
+        </ScrollView>
       </>
     );
   }

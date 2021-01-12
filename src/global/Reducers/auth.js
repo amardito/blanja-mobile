@@ -1,26 +1,11 @@
 import {authLoginType, authLogoutType} from '../actionType';
-import AsyncStorage from '@react-native-community/async-storage';
-
-const isLogin = async () => {
-  try {
-    console.log(`\n
-    initializing token: 
-    `);
-    // console.log(await AsyncStorage.getItem('token'));
-    const item = (await AsyncStorage.getItem('token')) === null ? false : true;
-    // console.log(item);
-    return item;
-  } catch (error) {
-    // Error get data
-    console.log(error);
-  }
-};
 
 const defaultState = {
-  isLogin: isLogin(),
+  isLogin: false,
 };
 
 const authReducer = (prevState = defaultState, action) => {
+  // console.log(defaultState());
   switch (action.type) {
     case authLoginType:
       return {

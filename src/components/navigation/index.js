@@ -1,18 +1,33 @@
 import React, {Component} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import SplashScreen from 'react-native-splash-screen';
+import AsyncStorage from '@react-native-community/async-storage';
 import {connect} from 'react-redux';
 import {
   getNewProductAction,
   getPopularProductAction,
 } from '../../global/ActionCreators/product';
+import {authLoginAction} from '../../global/ActionCreators/auth';
 
 import {Home, Profile, MyBag} from '../../screen';
 
 class main extends Component {
-  componentDidMount = () => {
-    this.props.dispatch(getNewProductAction());
-    this.props.dispatch(getPopularProductAction());
+  loginAct = async () => {
+    if ((await AsyncStorage.getItem('token')) !== null) {
+      this.props.dispatch(authLoginAction());
+    }
+    await SplashScreen.hide();
+  };
+
+  componentDidMount = async () => {
+    if ((await this.props.product.newProduct.values) === undefined) {
+      await this.props.dispatch(getNewProductAction());
+    }
+    if ((await this.props.product.popularProduct.values) === undefined) {
+      await this.props.dispatch(getPopularProductAction());
+    }
+    await this.loginAct();
   };
 
   render() {
@@ -66,9 +81,10 @@ class main extends Component {
   }
 }
 
-const mapStateToProps = ({product}) => {
+const mapStateToProps = ({product, auth}) => {
   return {
     product,
+    auth,
   };
 };
 

@@ -1,7 +1,6 @@
 import 'react-native-gesture-handler';
 import React, {Component} from 'react';
 import {StatusBar} from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Provider} from 'react-redux';
@@ -10,10 +9,6 @@ import store from './src/global/store';
 import {Auth, MainScreen, Detail} from './src/screen';
 
 export default class App extends Component {
-  componentDidMount = () => {
-    SplashScreen.hide();
-  };
-
   render() {
     const Stack = createStackNavigator();
     return (
