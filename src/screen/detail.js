@@ -26,6 +26,8 @@ import Icon from 'react-native-vector-icons/Fontisto';
 import Card from '../components/card/cardGrid';
 import {BoxShadow} from 'react-native-shadow';
 import {connect} from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
+import {getMyBagAction} from '../global/ActionCreators/bag';
 
 import s from '../styles/detailStyle';
 
@@ -38,6 +40,35 @@ class detail extends Component {
       like: false,
     };
   }
+
+  handleBag = async () => {
+    const {id_product, product_img, product_name, product_by, product_price} =
+      this.props.product.isFulfilled &&
+      this.props.product.singleProduct.product;
+    const {color, size} = this.state;
+    const prevData = JSON.parse(await AsyncStorage.getItem('belanjaUser'));
+    const dataItem = {
+      product_img: product_img[0],
+      product_name: product_name,
+      product_by: product_by,
+      product_price: product_price,
+      item_qty: 1,
+      id_product: id_product,
+      size: size === null ? 'none' : size,
+      color: color === null ? 'none' : color,
+    };
+
+    let newData = [];
+    if (prevData === [] || prevData === null) {
+      newData[0] = dataItem;
+    } else {
+      newData[0] = dataItem;
+      newData = prevData.concat(newData);
+    }
+
+    await AsyncStorage.setItem('belanjaUser', JSON.stringify(newData));
+    this.props.dispatch(getMyBagAction());
+  };
 
   render() {
     const shadowOpt = {
@@ -52,7 +83,6 @@ class detail extends Component {
       // style: {marginVertical: 5},
     };
     const {
-      // id_product,
       product_img,
       product_name,
       product_by,
@@ -60,23 +90,25 @@ class detail extends Component {
       product_sold,
       product_desc,
     } =
-      this.props.product.singleProduct &&
+      this.props.product.isFulfilled &&
       this.props.product.singleProduct.product;
 
     const {color, size} =
       this.props.product.singleProduct && this.props.product.singleProduct;
 
+    const {isFulfilled} = this.props.product;
+
     const colorItems = [];
-    color !== undefined &&
+    isFulfilled &&
       color.map(({color_id, color}) => {
-        const payload = {label: color, value: color_id};
+        const payload = {label: color, value: color};
         return colorItems.push(payload);
       });
 
     const sizeItems = [];
-    size !== undefined &&
+    isFulfilled &&
       size.map(({size_id, size}) => {
-        const payload = {label: size, value: size_id};
+        const payload = {label: size, value: size};
         return sizeItems.push(payload);
       });
     return (
@@ -101,7 +133,7 @@ class detail extends Component {
             </Button>
           </Left>
           <Body>
-            <Title style={{color: '#888'}}>{product_by}</Title>
+            <Title style={{color: '#888'}}>{isFulfilled && product_by}</Title>
           </Body>
           <Right>
             <Button transparent>
@@ -115,17 +147,19 @@ class detail extends Component {
         </Header>
         <ScrollView style={{backgroundColor: '#fcfcfc'}}>
           <ScrollView horizontal={true}>
-            {product_img !== undefined &&
-              product_img.map((value, index) => (
-                <View style={s.imageItems} key={index}>
-                  <Image
-                    source={{
-                      uri: `http://18.233.157.119:8000${value}`,
-                    }}
-                    style={s.image}
-                  />
-                </View>
-              ))}
+            {isFulfilled &&
+              product_img.map((value, index) => {
+                return (
+                  <View style={s.imageItems} key={index}>
+                    <Image
+                      source={{
+                        uri: `http://192.168.1.9:1010${value}`,
+                      }}
+                      style={s.image}
+                    />
+                  </View>
+                );
+              })}
           </ScrollView>
 
           <View style={{paddingHorizontal: 16}}>
@@ -244,9 +278,11 @@ class detail extends Component {
               <View style={{width: '60%'}}>
                 <Text
                   style={{fontSize: 24, fontWeight: 'bold', paddingRight: 8}}>
-                  {product_name}
+                  {isFulfilled && product_name}
                 </Text>
-                <Text style={{fontSize: 18, color: 'grey'}}>{product_by}</Text>
+                <Text style={{fontSize: 18, color: 'grey'}}>
+                  {isFulfilled && product_by}
+                </Text>
               </View>
               <Text
                 style={{
@@ -292,11 +328,11 @@ class detail extends Component {
                 size={18}
               />
               <Text style={{fontSize: 13, marginLeft: 3, color: '#9B9B9B'}}>
-                ({product_sold})
+                ({isFulfilled && product_sold})
               </Text>
             </View>
             <View>
-              <Text style={{fontSize: 18}}>{product_desc}</Text>
+              <Text style={{fontSize: 18}}>{isFulfilled && product_desc}</Text>
             </View>
           </View>
           <View
@@ -334,7 +370,10 @@ class detail extends Component {
           <BoxShadow setting={shadowOpt}>
             <FooterTab style={{backgroundColor: 'white'}}>
               <Button>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.handleBag();
+                  }}>
                   <View
                     style={{
                       height: 48,
@@ -356,9 +395,10 @@ class detail extends Component {
   }
 }
 
-const mapStateToProps = ({product}) => {
+const mapStateToProps = ({product, bag}) => {
   return {
     product,
+    bag,
   };
 };
 
