@@ -9,6 +9,7 @@ import {
   getPopularProductAction,
 } from '../../global/ActionCreators/product';
 import {authLoginAction} from '../../global/ActionCreators/auth';
+import {getMyBagAction} from '../../global/ActionCreators/bag';
 
 import {Home, Profile, MyBag} from '../../screen';
 
@@ -26,6 +27,9 @@ class main extends Component {
     }
     if ((await this.props.product.popularProduct.values) === undefined) {
       await this.props.dispatch(getPopularProductAction());
+    }
+    if ((await AsyncStorage.getItem('belanjaUser')) !== null) {
+      await this.props.dispatch(getMyBagAction());
     }
     await this.loginAct();
   };
@@ -81,10 +85,11 @@ class main extends Component {
   }
 }
 
-const mapStateToProps = ({product, auth}) => {
+const mapStateToProps = ({product, auth, bag}) => {
   return {
     product,
     auth,
+    bag,
   };
 };
 
