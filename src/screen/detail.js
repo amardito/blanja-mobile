@@ -42,7 +42,14 @@ class detail extends Component {
   }
 
   handleBag = async () => {
-    const {id_product, product_img, product_name, product_by, product_price} =
+    const {
+      id_product,
+      product_img,
+      product_name,
+      product_by,
+      product_price,
+      product_qty,
+    } =
       this.props.product.isFulfilled &&
       this.props.product.singleProduct.product;
     const {color, size} = this.state;
@@ -53,6 +60,7 @@ class detail extends Component {
       product_by: product_by,
       product_price: product_price,
       item_qty: 1,
+      max_qty: product_qty,
       id_product: id_product,
       size: size === null ? 'none' : size,
       color: color === null ? 'none' : color,
@@ -153,7 +161,7 @@ class detail extends Component {
                   <View style={s.imageItems} key={index}>
                     <Image
                       source={{
-                        uri: `http://192.168.1.9:1010${value}`,
+                        uri: `http://192.168.1.7:1010${value}`,
                       }}
                       style={s.image}
                     />

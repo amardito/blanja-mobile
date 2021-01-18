@@ -7,6 +7,8 @@ export const getPopularProduct = 'GET_POPULAR_PRODUCT';
 export const getSingleProduct = 'GET_SINGLE_PRODUCT';
 export const getMyBag = 'GET_WISHLIST_PRODUCT';
 export const clearMyBag = 'CLEAR_WISHLIST_PRODUCT';
+export const getCheckout = 'GET_CHECKOUT_ORDER';
+export const clearCheckout = 'cLEAR_CHECKOUT_ORDER';
 
 export const pending = `_${ActionType.Pending}`;
 export const rejected = `_${ActionType.Rejected}`;

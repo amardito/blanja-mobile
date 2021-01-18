@@ -7,6 +7,7 @@ import {
   View,
   ScrollView,
   TouchableHighlight,
+  TouchableOpacity,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {connect} from 'react-redux';
@@ -48,13 +49,21 @@ class mybag extends Component {
     const data =
       dataItem[0] !== undefined
         ? alasql(
-            'SELECT product_name, id_product, product_img, product_by, size, color, SUM(CAST([item_qty] AS INT)) AS [item_qty], SUM(CAST([product_price] AS INT)) AS [product_price] \
-        FROM ? GROUP BY id_product, product_img, product_by, product_name, size, color',
+            'SELECT product_name, id_product, product_img, product_by, size, color, max_qty, product_price, SUM(CAST([item_qty] AS INT)) AS [item_qty] \
+          FROM ? GROUP BY id_product, product_img, product_by, product_name, size, color, max_qty, product_price',
             [dataItem],
           )
         : [];
     const {isFulfilled} = this.props.bag;
-
+    const total =
+      this.props.checkout.data[0] !== undefined
+        ? alasql(
+            'SELECT SUM(CAST([price] AS INT)) AS [price] \
+          FROM ? ',
+            [this.props.checkout.data],
+          )[0].price
+        : 0;
+    console.log(this.props.checkout.data[0]);
     return (
       <>
         <Header style={s.header}>
@@ -92,7 +101,7 @@ class mybag extends Component {
             }}>
             <View
               style={{
-                marginTop: 33,
+                marginTop: 25,
                 display: 'flex',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
@@ -106,9 +115,8 @@ class mybag extends Component {
                 <TouchableHighlight>
                   <Text
                     style={{
-                      fontSize: 17,
+                      fontSize: 20,
                       color: 'red',
-                      fontWeight: '600',
                       paddingVertical: 5,
                     }}
                     onPress={() => {
@@ -117,7 +125,7 @@ class mybag extends Component {
                         getData: [],
                       });
                     }}>
-                    Clear My Bag
+                    Delete All
                   </Text>
                 </TouchableHighlight>
               </View>
@@ -134,6 +142,7 @@ class mybag extends Component {
                       size,
                       color,
                       product_price,
+                      max_qty,
                       item_qty,
                     },
                     index,
@@ -141,12 +150,14 @@ class mybag extends Component {
                     return (
                       <CardBag
                         key={index}
+                        index={index}
                         product_name={product_name}
                         id_product={id_product}
                         product_img={product_img}
                         size={size}
                         color={color}
                         product_price={product_price}
+                        max_qty={max_qty}
                         item_qty={item_qty}
                       />
                     );
@@ -158,15 +169,52 @@ class mybag extends Component {
             </View>
           </View>
         </ScrollView>
+        <View
+          style={{
+            width: '100%',
+            paddingHorizontal: 40,
+            paddingVertical: 5,
+            backgroundColor: '#fff',
+            elevation: 20,
+          }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              marginBottom: 5,
+            }}>
+            <Text style={{fontSize: 16, color: 'dimgray'}}>Total amount :</Text>
+            <Text style={{fontSize: 16, fontWeight: '700'}}>
+              IDR{' '}
+              {Number(total)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            </Text>
+          </View>
+          <TouchableOpacity
+            style={{
+              width: '100%',
+              backgroundColor: '#DB3022',
+              paddingVertical: 10,
+              borderRadius: 20,
+              marginBottom: 5,
+              elevation: 6,
+            }}>
+            <Text style={{textAlign: 'center', color: '#fff', fontSize: 16}}>
+              CHECK OUT
+            </Text>
+          </TouchableOpacity>
+        </View>
       </>
     );
   }
 }
 
-const mapStateToProps = ({auth, bag}) => {
+const mapStateToProps = ({auth, bag, checkout}) => {
   return {
     auth,
     bag,
+    checkout,
   };
 };
 

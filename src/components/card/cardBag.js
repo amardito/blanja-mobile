@@ -1,105 +1,313 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  Text,
+  TouchableHighlight,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import {connect} from 'react-redux';
+import {getMyBagAction} from '../../global/ActionCreators/bag';
+import {getCheckoutAction} from '../../global/ActionCreators/checkout';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import s from '../../styles/cardBagStyle';
 
-export default class cardBag extends Component {
+class cardBag extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      number: props.item_qty,
+      max: props.max_qty,
+      pop: false,
+      selected:
+        props.checkout.data.filter(
+          (data) => data.indexof === this.props.index,
+        )[0] !== undefined
+          ? true
+          : false,
+    };
+    this.timer = null;
+    this.addOne = this.addOne.bind(this);
+    this.subOne = this.subOne.bind(this);
+    this.stopTimer = this.stopTimer.bind(this);
+  }
+
+  addOne() {
+    if (this.state.number < this.state.max && this.state.selected === false) {
+      this.setState({number: this.state.number + 1});
+      this.timer = setTimeout(this.addOne, -1900);
+    }
+  }
+
+  subOne() {
+    if (this.state.number > 1 && this.state.selected === false) {
+      this.setState({number: this.state.number - 1});
+      this.timer = setTimeout(this.subOne, -1900);
+    }
+  }
+
+  stopTimer() {
+    clearTimeout(this.timer);
+  }
+
+  handleDelete = async () => {
+    let newData = JSON.parse(await AsyncStorage.getItem('belanjaUser'));
+    newData.splice(this.props.index, 1);
+    await AsyncStorage.setItem('belanjaUser', JSON.stringify(newData));
+    this.props.dispatch(getMyBagAction());
+  };
+
+  handleSelect = async () => {
+    const {size, color, product_price, id_product, index} = this.props;
+    const prevData = JSON.parse(await AsyncStorage.getItem('checkout'));
+    const dataItem = {
+      indexof: index,
+      product_id: id_product,
+      qty: this.state.number,
+      color: color,
+      size: size,
+      price: product_price * this.state.number,
+    };
+    let newData = [];
+    if (prevData === [] || prevData === null) {
+      newData[0] = dataItem;
+    } else {
+      newData[0] = dataItem;
+      newData = prevData.concat(newData);
+    }
+
+    await AsyncStorage.setItem('checkout', JSON.stringify(newData));
+    this.props.dispatch(getCheckoutAction());
+  };
+
+  handleUnSelect = async () => {
+    let newData = JSON.parse(await AsyncStorage.getItem('checkout'));
+    newData = newData.filter((data) => data.indexof !== this.props.index);
+    await AsyncStorage.setItem('checkout', JSON.stringify(newData));
+    this.props.dispatch(getCheckoutAction());
+  };
+
   render() {
-    const {
-      product_name,
-      product_img,
-      size,
-      color,
-      item_qty,
-      product_price,
-    } = this.props;
+    const {product_name, product_img, size, color, product_price} = this.props;
     return (
-      <View style={s.cardBag}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            width: '100%',
-          }}>
-          <Image
-            style={s.img}
-            source={{
-              uri: `http://192.168.1.9:1010${product_img}`,
-            }}
-          />
-          <View style={{width: '67%', marginTop: 5}}>
-            <Text style={{fontSize: 13, paddingRight: 10}}>{product_name}</Text>
-            <View style={s.dtlZiseCol}>
-              <Text style={{fontSize: 11}}>Color : {color}</Text>
-              <Text style={{fontSize: 11}}>Size : {size}</Text>
-            </View>
+      <TouchableHighlight
+        style={{width: '100%', marginBottom: 20, borderRadius: 15}}
+        onPress={() => {
+          if (this.state.pop === false) {
+            if (this.state.selected) {
+              this.handleUnSelect();
+              this.setState({
+                selected: !this.state.selected,
+              });
+            } else {
+              this.handleSelect();
+              this.setState({
+                selected: !this.state.selected,
+              });
+            }
+          }
+        }}>
+        <>
+          <View
+            style={{
+              width: '100%',
+              height: 104,
+              borderRadius: 15,
+              overflow: 'hidden',
+              backgroundColor: '#fff',
+              elevation: this.state.selected ? 0 : 12,
+              position: 'relative',
+            }}>
+            {this.state.pop && (
+              <View
+                onPress={() => {
+                  this.setState({
+                    pop: !this.state.pop,
+                  });
+                }}
+                style={{
+                  position: 'absolute',
+                  zIndex: 1,
+                  top: 0,
+                  left: 0,
+                  width: '90%',
+                  flexDirection: 'row',
+                  justifyContent: 'flex-end',
+                  paddingTop: 5,
+                  paddingBottom: 55,
+                }}>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.handleDelete();
+                  }}
+                  style={{
+                    elevation: 10,
+                    backgroundColor: '#fff',
+                    padding: 10,
+                    paddingHorizontal: 15,
+                    borderRadius: 8,
+                  }}>
+                  <Text style={{fontSize: 15}}>Delete</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
             <View
               style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                alignItems: 'center',
+                width: '100%',
               }}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  width: 111,
-                  height: 36,
-                  marginTop: 5,
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}>
-                <TouchableOpacity>
+              <Image
+                style={s.img}
+                source={{
+                  uri: `http://192.168.1.7:1010${product_img}`,
+                }}
+              />
+              <View style={{width: '67%', marginTop: 5}}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    paddingBottom: 5,
+                  }}>
+                  <View style={{width: '82%'}}>
+                    <Text
+                      style={{
+                        fontSize: 15,
+                        paddingRight: 10,
+                      }}>
+                      {product_name}
+                    </Text>
+                    <View style={s.dtlZiseCol}>
+                      <Text style={{fontSize: 12}}>
+                        Color : <Text style={{fontWeight: '700'}}>{color}</Text>
+                      </Text>
+                      <Text style={{fontSize: 12}}>
+                        Size : <Text style={{fontWeight: '700'}}>{size}</Text>
+                      </Text>
+                    </View>
+                  </View>
+                  <MaterialCommunityIcons
+                    onPress={() => {
+                      this.setState({
+                        pop: !this.state.pop,
+                      });
+                    }}
+                    style={{padding: 5}}
+                    name="dots-vertical"
+                    color={'#888'}
+                    size={25}
+                  />
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
                   <View
                     style={{
+                      flexDirection: 'row',
+                      width: 111,
                       height: 36,
-                      width: 36,
-                      borderRadius: 18,
-                      borderColor: 'black',
-                      borderWidth: 1,
-                      justifyContent: 'center',
+                      marginTop: 5,
+                      justifyContent: 'space-between',
                       alignItems: 'center',
                     }}>
-                    <Text style={{fontSize: 30, marginTop: -5}}>-</Text>
+                    <TouchableOpacity
+                      onPressIn={this.subOne}
+                      onPressOut={this.stopTimer}>
+                      <View
+                        style={{
+                          height: 36,
+                          width: 36,
+                          borderRadius: 18,
+                          borderColor: '#fff',
+                          borderWidth: 1,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          elevation: this.state.number > 1 ? 10 : 0,
+                          backgroundColor: '#fff',
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 30,
+                            marginTop: -5,
+                            fontWeight: '700',
+                            color:
+                              this.state.number > 1 ? 'black' : 'lightgray',
+                          }}>
+                          -
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                    <Text>{this.state.number}</Text>
+                    <TouchableOpacity
+                      onPressIn={this.addOne}
+                      onPressOut={this.stopTimer}>
+                      <View
+                        style={{
+                          height: 36,
+                          width: 36,
+                          borderRadius: 18,
+                          borderColor: '#fff',
+                          borderWidth: 1,
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          elevation:
+                            this.state.number < this.state.max ? 10 : 0,
+                          backgroundColor: '#fff',
+                        }}>
+                        <Text
+                          style={{
+                            fontSize: 30,
+                            marginTop: -5,
+                            color:
+                              this.state.number < this.state.max
+                                ? 'black'
+                                : 'lightgray',
+                          }}>
+                          +
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
                   </View>
-                </TouchableOpacity>
-                <Text>{item_qty}</Text>
-                <TouchableOpacity>
                   <View
                     style={{
-                      height: 36,
-                      width: 36,
-                      borderRadius: 18,
-                      borderColor: 'black',
-                      borderWidth: 1,
-                      justifyContent: 'center',
-                      alignItems: 'center',
+                      width: '45%',
+                      paddingHorizontal: 10,
+                      alignItems: 'flex-end',
                     }}>
-                    <Text style={{fontSize: 30, marginTop: -5}}>+</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  width: '45%',
-                  paddingHorizontal: 10,
-                  alignItems: 'flex-end',
-                }}>
-                <Text>
-                  IDR{' '}
-                  {Number(product_price)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',') === 'NaN'
-                    ? 0
-                    : Number(product_price)
+                    <Text>
+                      IDR{' '}
+                      {Number(product_price)
                         .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                </Text>
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',') === 'NaN'
+                        ? 0
+                        : Number(product_price * this.state.number)
+                            .toString()
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                    </Text>
+                  </View>
+                </View>
               </View>
             </View>
           </View>
-        </View>
-      </View>
+        </>
+      </TouchableHighlight>
     );
   }
 }
+
+const mapStateToProps = ({checkout}) => {
+  return {
+    checkout,
+  };
+};
+export default connect(mapStateToProps)(cardBag);

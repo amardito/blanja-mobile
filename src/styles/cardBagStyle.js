@@ -1,15 +1,6 @@
 import {StyleSheet} from 'react-native';
 
 const cardBagStyle = StyleSheet.create({
-  cardBag: {
-    width: '100%',
-    height: 104,
-    borderRadius: 15,
-    overflow: 'hidden',
-    backgroundColor: '#fff',
-    elevation: 6,
-    marginBottom: 25,
-  },
   img: {
     width: 104,
     height: 104,
@@ -18,7 +9,7 @@ const cardBagStyle = StyleSheet.create({
   },
   dtlZiseCol: {
     flexDirection: 'row',
-    width: 125,
+    width: 140,
     justifyContent: 'space-between',
     marginTop: 4,
   },
