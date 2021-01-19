@@ -2,10 +2,22 @@ import React, {Component} from 'react';
 import {View, Image, ScrollView, Text, TouchableOpacity} from 'react-native';
 import Card from '../components/card/cardGrid';
 import {connect} from 'react-redux';
+import {getMyAddressAction} from '../global/ActionCreators/address';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import s from '../styles/homeStyles';
 
 class home extends Component {
+  componentDidMount = async () => {
+    if ((await this.props.address.data[0]) === undefined) {
+      if ((await AsyncStorage.getItem('token')) !== null) {
+        const token = await AsyncStorage.getItem('token');
+        this.props.dispatch(
+          getMyAddressAction({email: JSON.parse(token).email}),
+        );
+      }
+    }
+  };
   render() {
     const {newProduct, popularProduct} = this.props.product;
     return (
@@ -103,9 +115,10 @@ class home extends Component {
   }
 }
 
-const mapStateToProps = ({product}) => {
+const mapStateToProps = ({product, address}) => {
   return {
     product,
+    address,
   };
 };
 

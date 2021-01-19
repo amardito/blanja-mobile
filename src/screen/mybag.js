@@ -96,6 +96,7 @@ class mybag extends Component {
           <View
             style={{
               paddingHorizontal: 14,
+              marginBottom: 150,
             }}>
             <View
               style={{

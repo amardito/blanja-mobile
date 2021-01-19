@@ -32,7 +32,7 @@ const profileStyle = StyleSheet.create({
     marginTop: 17,
   },
   accordian: {
-    marginTop: 46,
+    marginTop: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

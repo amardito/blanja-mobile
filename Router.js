@@ -85,25 +85,25 @@ export default class App extends Component {
             />
 
             <Stack.Screen
-              name="checkout"
+              name="addresslist"
               component={ShippingAddress.ListAddress}
               options={{headerShown: false}}
             />
             <Stack.Screen
-              name="checkout"
+              name="changeaddress"
               component={ShippingAddress.ChangeAddress}
               options={{headerShown: false}}
             />
             <Stack.Screen
-              name="checkout"
+              name="newaddress"
               component={ShippingAddress.AddAddress}
               options={{headerShown: false}}
             />
-            <Stack.Screen
+            {/* <Stack.Screen
               name="checkout"
               component={ShippingAddress.SelectAddress}
               options={{headerShown: false}}
-            />
+            /> */}
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>

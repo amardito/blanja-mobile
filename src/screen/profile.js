@@ -63,7 +63,7 @@ class profile extends Component {
       item = await JSON.parse(item);
       console.log(`
       getting token ... \n
-      ${item.token}
+      success
       `);
       // console.log(typeof item);
       this.setState({
@@ -77,7 +77,6 @@ class profile extends Component {
 
   logoutHandle = async () => {
     const {token} = this.state;
-    console.log(token);
     await api
       .post('auth/logout', null, {
         headers: {
@@ -108,6 +107,7 @@ class profile extends Component {
   render() {
     const {username, email} = this.state.token !== null && this.state.token;
     const ImageProfile = undefined;
+    const address = this.props.address.data;
     return (
       <>
         <Header style={s.header}>
@@ -183,14 +183,16 @@ class profile extends Component {
             <View style={s.line} />
             <TouchableOpacity
               onPress={() => {
-                // navigation.navigate('ShippingAddress')
+                this.props.navigation.navigate('addresslist');
               }}>
               <View style={s.accordian}>
                 <View>
                   <Text style={{fontSize: 16, fontWeight: 'bold'}}>
                     Shipping Address
                   </Text>
-                  <Text style={{color: 'grey'}}>3 Address</Text>
+                  <Text style={{color: 'grey'}}>
+                    {address.length ? address.length : '0'} Address
+                  </Text>
                 </View>
                 <MaterialCommunityIcons
                   name="chevron-right"
@@ -220,15 +222,14 @@ class profile extends Component {
             </TouchableOpacity>
             <View style={s.line} />
           </View>
-          <TouchableOpacity
+          <View
             style={{
               alignItems: 'center',
               justifyContent: 'center',
               height: 55,
               marginBottom: 40,
-            }}
-            onPress={() => this.logoutHandle()}>
-            <View
+            }}>
+            <TouchableOpacity
               style={{
                 height: 48,
                 width: 300,
@@ -237,18 +238,20 @@ class profile extends Component {
                 justifyContent: 'center',
                 alignItems: 'center',
                 elevation: 5,
-              }}>
+              }}
+              onPress={() => this.logoutHandle()}>
               <Text style={{color: 'white', fontWeight: '700'}}>LOGOUT</Text>
-            </View>
-          </TouchableOpacity>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
       </>
     );
   }
 }
-const mapStateToProps = ({auth}) => {
+const mapStateToProps = ({auth, address}) => {
   return {
     auth,
+    address,
   };
 };
 
