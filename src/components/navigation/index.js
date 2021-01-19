@@ -10,6 +10,7 @@ import {
 } from '../../global/ActionCreators/product';
 import {authLoginAction} from '../../global/ActionCreators/auth';
 import {getMyBagAction} from '../../global/ActionCreators/bag';
+import {getCheckoutAction} from '../../global/ActionCreators/checkout';
 
 import {Home, Profile, MyBag} from '../../screen';
 
@@ -30,6 +31,9 @@ class main extends Component {
     }
     if ((await AsyncStorage.getItem('belanjaUser')) !== null) {
       await this.props.dispatch(getMyBagAction());
+    }
+    if ((await AsyncStorage.getItem('checkout')) !== null) {
+      await this.props.dispatch(getCheckoutAction());
     }
     await this.loginAct();
   };

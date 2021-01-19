@@ -1,3 +1,4 @@
+/* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {
@@ -38,14 +39,14 @@ class cardBag extends Component {
   addOne() {
     if (this.state.number < this.state.max && this.state.selected === false) {
       this.setState({number: this.state.number + 1});
-      this.timer = setTimeout(this.addOne, -1900);
+      this.timer = setTimeout(this.addOne, 1);
     }
   }
 
   subOne() {
     if (this.state.number > 1 && this.state.selected === false) {
       this.setState({number: this.state.number - 1});
-      this.timer = setTimeout(this.subOne, -1900);
+      this.timer = setTimeout(this.subOne, 1);
     }
   }
 
@@ -90,6 +91,26 @@ class cardBag extends Component {
     this.props.dispatch(getCheckoutAction());
   };
 
+  componentDidUpdate() {
+    if (
+      this.state.selected !==
+      (this.props.checkout.data.filter(
+        (data) => data.indexof === this.props.index,
+      )[0] !== undefined
+        ? true
+        : false)
+    ) {
+      this.setState({
+        selected:
+          this.props.checkout.data.filter(
+            (data) => data.indexof === this.props.index,
+          )[0] !== undefined
+            ? true
+            : false,
+      });
+    }
+  }
+
   render() {
     const {product_name, product_img, size, color, product_price} = this.props;
     return (
@@ -115,10 +136,15 @@ class cardBag extends Component {
             style={{
               width: '100%',
               height: 104,
-              borderRadius: 15,
+              borderTopRightRadius: 15,
+              borderBottomRightRadius: 15,
+              borderTopLeftRadius: this.state.selected ? 0 : 15,
+              borderBottomLeftRadius: this.state.selected ? 0 : 15,
               overflow: 'hidden',
               backgroundColor: '#fff',
               elevation: this.state.selected ? 0 : 12,
+              borderLeftWidth: this.state.selected ? 5 : 0,
+              borderColor: this.state.selected ? '#DB3022' : '#fff',
               position: 'relative',
             }}>
             {this.state.pop && (
@@ -200,7 +226,7 @@ class cardBag extends Component {
                     }}
                     style={{padding: 5}}
                     name="dots-vertical"
-                    color={'#888'}
+                    color={this.state.pop ? 'black' : '#a0a0a0'}
                     size={25}
                   />
                 </View>
@@ -232,7 +258,11 @@ class cardBag extends Component {
                           borderWidth: 1,
                           justifyContent: 'center',
                           alignItems: 'center',
-                          elevation: this.state.number > 1 ? 10 : 0,
+                          elevation:
+                            this.state.number > 1 &&
+                            this.state.selected === false
+                              ? 10
+                              : 0,
                           backgroundColor: '#fff',
                         }}>
                         <Text
@@ -261,7 +291,10 @@ class cardBag extends Component {
                           justifyContent: 'center',
                           alignItems: 'center',
                           elevation:
-                            this.state.number < this.state.max ? 10 : 0,
+                            this.state.number < this.state.max &&
+                            this.state.selected === false
+                              ? 10
+                              : 0,
                           backgroundColor: '#fff',
                         }}>
                         <Text

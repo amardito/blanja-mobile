@@ -4,8 +4,6 @@ const cardBagStyle = StyleSheet.create({
   img: {
     width: 104,
     height: 104,
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
   },
   dtlZiseCol: {
     flexDirection: 'row',

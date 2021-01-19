@@ -6,12 +6,11 @@ import {
   Text,
   View,
   ScrollView,
-  TouchableHighlight,
   TouchableOpacity,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {connect} from 'react-redux';
-import {clearMyBagAction} from '../global/ActionCreators/bag';
+import {clearCheckoutAction} from '../global/ActionCreators/checkout';
 import alasql from 'alasql';
 
 import s from '../styles/bagStyle';
@@ -63,7 +62,6 @@ class mybag extends Component {
             [this.props.checkout.data],
           )[0].price
         : 0;
-    console.log(this.props.checkout.data[0]);
     return (
       <>
         <Header style={s.header}>
@@ -109,25 +107,26 @@ class mybag extends Component {
               <Text style={s.titleScreen}>My Bag</Text>
               <View
                 style={{
-                  alignItems: 'flex-end',
                   justifyContent: 'center',
+                  alignItems: 'flex-end',
                 }}>
-                <TouchableHighlight>
+                <TouchableOpacity>
                   <Text
                     style={{
-                      fontSize: 20,
+                      fontSize: 18,
                       color: 'red',
                       paddingVertical: 5,
                     }}
                     onPress={() => {
-                      this.props.dispatch(clearMyBagAction());
+                      this.props.dispatch(clearCheckoutAction());
                       this.setState({
                         getData: [],
                       });
                     }}>
-                    Delete All
+                    Unselect All
                   </Text>
-                </TouchableHighlight>
+                </TouchableOpacity>
+                <Text>Selected ( {this.props.checkout.data.length} )</Text>
               </View>
             </View>
             <View style={s.cardList}>
@@ -169,22 +168,17 @@ class mybag extends Component {
             </View>
           </View>
         </ScrollView>
-        <View
-          style={{
-            width: '100%',
-            paddingHorizontal: 40,
-            paddingVertical: 5,
-            backgroundColor: '#fff',
-            elevation: 20,
-          }}>
+        <View style={s.addcart}>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              marginBottom: 5,
+              backgroundColor: '#fff',
+              marginHorizontal: 10,
+              marginVertical: 20,
             }}>
-            <Text style={{fontSize: 16, color: 'dimgray'}}>Total amount :</Text>
-            <Text style={{fontSize: 16, fontWeight: '700'}}>
+            <Text style={{color: 'gray'}}>Total amount:</Text>
+            <Text>
               IDR{' '}
               {Number(total)
                 .toString()
@@ -192,17 +186,15 @@ class mybag extends Component {
             </Text>
           </View>
           <TouchableOpacity
-            style={{
-              width: '100%',
-              backgroundColor: '#DB3022',
-              paddingVertical: 10,
-              borderRadius: 20,
-              marginBottom: 5,
-              elevation: 6,
+            onPress={() => {
+              // postHistory();
+              // navigation.navigate('Success');
+              this.props.checkout.data[0] !== undefined &&
+                this.props.navigation.navigate('checkout');
             }}>
-            <Text style={{textAlign: 'center', color: '#fff', fontSize: 16}}>
-              CHECK OUT
-            </Text>
+            <View style={s.btn}>
+              <Text style={{color: '#fff'}}>CHECK OUT</Text>
+            </View>
           </TouchableOpacity>
         </View>
       </>
