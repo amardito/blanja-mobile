@@ -6,7 +6,13 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {Provider} from 'react-redux';
 import store from './src/global/store';
 
-import {Auth, MainScreen, Detail} from './src/screen';
+import {
+  Auth,
+  MainScreen,
+  Detail,
+  Checkout,
+  ShippingAddress,
+} from './src/screen';
 
 export default class App extends Component {
   render() {
@@ -65,9 +71,37 @@ export default class App extends Component {
                 },
               }}
             />
+
             <Stack.Screen
               name="detail"
               component={Detail}
+              options={{headerShown: false}}
+            />
+
+            <Stack.Screen
+              name="checkout"
+              component={Checkout}
+              options={{headerShown: false}}
+            />
+
+            <Stack.Screen
+              name="checkout"
+              component={ShippingAddress.ListAddress}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="checkout"
+              component={ShippingAddress.ChangeAddress}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="checkout"
+              component={ShippingAddress.AddAddress}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="checkout"
+              component={ShippingAddress.SelectAddress}
               options={{headerShown: false}}
             />
           </Stack.Navigator>
