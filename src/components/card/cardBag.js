@@ -39,14 +39,14 @@ class cardBag extends Component {
   addOne() {
     if (this.state.number < this.state.max && this.state.selected === false) {
       this.setState({number: this.state.number + 1});
-      this.timer = setTimeout(this.addOne, 1);
+      this.timer = setTimeout(this.addOne, -450);
     }
   }
 
   subOne() {
     if (this.state.number > 1 && this.state.selected === false) {
       this.setState({number: this.state.number - 1});
-      this.timer = setTimeout(this.subOne, 1);
+      this.timer = setTimeout(this.subOne, -450);
     }
   }
 

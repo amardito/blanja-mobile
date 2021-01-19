@@ -31,8 +31,7 @@ const cardAddress = (props) => {
           },
         ]);
       })
-      .catch((e) => {
-        console.log(e);
+      .catch(() => {
         Alert.alert(
           'Failed Delete',
           null,

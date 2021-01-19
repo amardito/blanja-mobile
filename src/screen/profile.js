@@ -65,7 +65,7 @@ class profile extends Component {
       getting token ... \n
       success
       `);
-      // console.log(typeof item);
+
       this.setState({
         token: item,
       });

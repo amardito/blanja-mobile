@@ -5,7 +5,6 @@ const defaultState = {
 };
 
 const authReducer = (prevState = defaultState, action) => {
-  // console.log(defaultState());
   switch (action.type) {
     case authLoginType:
       return {

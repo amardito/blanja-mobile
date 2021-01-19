@@ -11,7 +11,6 @@ const defaultState = {
 };
 
 const mybagReducer = (prevState = defaultState, action) => {
-  // console.log(action.payload);
   switch (action.type) {
     case getMyBag + pending:
       return {

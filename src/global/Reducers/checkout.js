@@ -1,6 +1,8 @@
 import {
   getCheckout,
   clearCheckout,
+  getCheckoutAddress,
+  deleteCheckoutAddress,
   pending,
   fulfilled,
   rejected,
@@ -8,10 +10,10 @@ import {
 
 const defaultState = {
   data: [],
+  address: {},
 };
 
 const checkoutReducer = (prevState = defaultState, action) => {
-  // console.log(action.payload);
   switch (action.type) {
     case getCheckout + pending:
       return {
@@ -55,6 +57,18 @@ const checkoutReducer = (prevState = defaultState, action) => {
         isPending: false,
         isFulfilled: true,
         data: [],
+      };
+
+    case getCheckoutAddress:
+      return {
+        ...prevState,
+        address: action.payload,
+      };
+
+    case deleteCheckoutAddress:
+      return {
+        ...prevState,
+        address: {},
       };
 
     default:

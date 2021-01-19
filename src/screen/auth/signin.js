@@ -37,13 +37,10 @@ class signin extends Component {
   handleLogin = async () => {
     const mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-]/;
     if (this.state.email === '') {
-      // console.log('fill your email first');
       this.setState({errMsg: 'Fill your email first'});
     } else if (!this.state.email.match(mailformat)) {
-      // console.log('invalid email format');
       this.setState({errMsg: "Invalid email format ['@', '.', 'domain']"});
     } else if (this.state.password === '') {
-      // console.log('fill your password first');
       this.setState({errMsg: 'Fill your password first'});
     } else {
       const payload = JSON.stringify({
@@ -65,14 +62,10 @@ class signin extends Component {
         .then(async ({data}) => {
           this.props.dispatch(authLoginAction());
           await this._storeData(JSON.stringify(data.data));
-          // console.log(data.data);
+
           this.props.navigation.navigate('mainscreen');
         })
         .catch((e) => {
-          // console.log(e);
-          // console.log(this.state.email);
-          // console.log(this.state.password);
-          // console.log(payload);
           if (e.response.status === 404) {
             this.setState({
               errMsg: 'Email or password is wrong',

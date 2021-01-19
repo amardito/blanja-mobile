@@ -99,11 +99,11 @@ export default class App extends Component {
               component={ShippingAddress.AddAddress}
               options={{headerShown: false}}
             />
-            {/* <Stack.Screen
-              name="checkout"
+            <Stack.Screen
+              name="selectaddress"
               component={ShippingAddress.SelectAddress}
               options={{headerShown: false}}
-            /> */}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </Provider>
