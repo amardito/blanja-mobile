@@ -366,47 +366,49 @@ class detail extends Component {
           </View>
           <View style={s.lastContent} />
         </ScrollView>
-
-        <Footer
-          style={{
-            height: 60,
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'transparent',
-          }}>
-          <BoxShadow setting={shadowOpt}>
-            <FooterTab style={{backgroundColor: 'white'}}>
-              <Button>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.handleBag();
-                  }}>
-                  <View
-                    style={{
-                      height: 48,
-                      width: 343,
-                      borderRadius: 25,
-                      backgroundColor: '#DB3022',
-                      justifyContent: 'center',
-                      alignItems: 'center',
+        {this.props.auth.level !== 'seller' && (
+          <Footer
+            style={{
+              height: 60,
+              width: '100%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: 'transparent',
+            }}>
+            <BoxShadow setting={shadowOpt}>
+              <FooterTab style={{backgroundColor: 'white'}}>
+                <Button>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.handleBag();
                     }}>
-                    <Text style={{color: 'white'}}>ADD TO CART</Text>
-                  </View>
-                </TouchableOpacity>
-              </Button>
-            </FooterTab>
-          </BoxShadow>
-        </Footer>
+                    <View
+                      style={{
+                        height: 48,
+                        width: 343,
+                        borderRadius: 25,
+                        backgroundColor: '#DB3022',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                      }}>
+                      <Text style={{color: 'white'}}>ADD TO CART</Text>
+                    </View>
+                  </TouchableOpacity>
+                </Button>
+              </FooterTab>
+            </BoxShadow>
+          </Footer>
+        )}
       </>
     );
   }
 }
 
-const mapStateToProps = ({product, bag}) => {
+const mapStateToProps = ({product, bag, auth}) => {
   return {
     product,
     bag,
+    auth,
   };
 };
 

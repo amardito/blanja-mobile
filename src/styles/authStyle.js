@@ -10,11 +10,11 @@ const authStyle = StyleSheet.create({
   headerText: {
     fontSize: 34,
     fontWeight: '700',
-    marginBottom: 45,
   },
   formInput: {
     height: 'auto',
     paddingHorizontal: 8,
+    marginTop: 30,
     paddingBottom: 16,
     backgroundColor: '#ffffff00',
   },

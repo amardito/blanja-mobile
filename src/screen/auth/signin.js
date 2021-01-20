@@ -19,6 +19,7 @@ class signin extends Component {
     this.state = {
       email: '',
       password: '',
+      level: 1,
       errMsg: '',
     };
     this._storeData = async (token) => {
@@ -46,7 +47,7 @@ class signin extends Component {
       const payload = JSON.stringify({
         email: this.state.email,
         password: this.state.password,
-        level: 1,
+        level: this.state.level,
       });
 
       console.log(`\n
@@ -60,12 +61,13 @@ class signin extends Component {
           },
         })
         .then(async ({data}) => {
-          this.props.dispatch(authLoginAction());
+          this.props.dispatch(authLoginAction(data.data.login_as));
           await this._storeData(JSON.stringify(data.data));
 
           this.props.navigation.navigate('mainscreen');
         })
         .catch((e) => {
+          console.log(e.response);
           if (e.response.status === 404) {
             this.setState({
               errMsg: 'Email or password is wrong',
@@ -73,7 +75,16 @@ class signin extends Component {
               password: '',
             });
           }
-          if (e.response.status === 401) {
+          if (
+            e.response.data.error === 'Your account not registred as seller'
+          ) {
+            this.setState({
+              errMsg: 'Your account not registred as seller',
+              email: '',
+              password: '',
+            });
+          }
+          if (e.response.data.error === 'wrong password') {
             this.setState({
               errMsg: 'Email or password is wrong',
               password: '',
@@ -91,20 +102,73 @@ class signin extends Component {
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              alignItems: 'flex-end',
             }}>
             <Text style={s.headerText}> Login </Text>
+            <View
+              style={{
+                width: '40%',
+                overflow: 'hidden',
+                borderRadius: 6,
+                borderWidth: 2,
+                borderColor: '#DB3022',
+                flexDirection: 'row',
+                marginRight: 10,
+              }}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({
+                    level: 1,
+                  });
+                }}
+                style={{
+                  width: '56%',
+                  backgroundColor: this.state.level === 1 ? '#DB3022' : '#fff',
+                  paddingVertical: 10,
+                }}>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    width: '100%',
+                    color: this.state.level === 1 ? '#fff' : '#DB3022',
+                    fontSize: 15,
+                  }}>
+                  Consumer
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({
+                    level: 2,
+                  });
+                }}
+                style={{
+                  width: '44%',
+                  backgroundColor: this.state.level === 2 ? '#DB3022' : '#fff',
+                  paddingVertical: 10,
+                }}>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    width: '100%',
+                    color: this.state.level === 2 ? '#fff' : '#DB3022',
+                    fontSize: 15,
+                  }}>
+                  Seller
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+          <Container style={s.formInput}>
             <Text
               style={{
-                marginBottom: 45,
+                marginBottom: 10,
                 color: 'red',
                 paddingRight: 10,
                 fontSize: 15,
+                textAlign: 'right',
               }}>
               {this.state.errMsg}
             </Text>
-          </View>
-          <Container style={s.formInput}>
             <Form>
               <Item floatingLabel style={s.inputBox}>
                 <Label style={s.labelStyle} floatBack={3}>
@@ -115,8 +179,10 @@ class signin extends Component {
                   onChangeText={(e) =>
                     this.setState({
                       email: e,
+                      errMsg: null,
                     })
                   }
+                  defaultValue={this.state.email}
                 />
               </Item>
 
@@ -129,8 +195,10 @@ class signin extends Component {
                   onChangeText={(e) =>
                     this.setState({
                       password: e,
+                      errMsg: null,
                     })
                   }
+                  defaultValue={this.state.password}
                 />
               </Item>
 

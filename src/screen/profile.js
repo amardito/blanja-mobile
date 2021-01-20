@@ -162,48 +162,96 @@ class profile extends Component {
           </Card>
 
           <View style={{padding: 14}}>
-            <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.navigate('myorder');
-              }}>
-              <View style={s.accordian}>
-                <View>
-                  <Text style={{fontSize: 16, fontWeight: 'bold'}}>
-                    My Order
-                  </Text>
-                  <Text style={{color: 'grey'}}>
-                    See your history payment here!
-                  </Text>
+            {this.props.auth.level !== 'seller' ? (
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate('myorder');
+                }}>
+                <View style={s.accordian}>
+                  <View>
+                    <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+                      My Order
+                    </Text>
+                    <Text style={{color: 'grey'}}>
+                      See your history payment here!
+                    </Text>
+                  </View>
+                  <MaterialCommunityIcons
+                    name="chevron-right"
+                    color={'#888'}
+                    size={35}
+                  />
                 </View>
-                <MaterialCommunityIcons
-                  name="chevron-right"
-                  color={'#888'}
-                  size={35}
-                />
-              </View>
-            </TouchableOpacity>
-            <View style={s.line} />
-            <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.navigate('addresslist');
-              }}>
-              <View style={s.accordian}>
-                <View>
-                  <Text style={{fontSize: 16, fontWeight: 'bold'}}>
-                    Shipping Address
-                  </Text>
-                  <Text style={{color: 'grey'}}>
-                    {address.length ? address.length : '0'} Address
-                  </Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate('myproduct');
+                }}>
+                <View style={s.accordian}>
+                  <View>
+                    <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+                      My Product
+                    </Text>
+                    <Text style={{color: 'grey'}}>
+                      See your product list at here!
+                    </Text>
+                  </View>
+                  <MaterialCommunityIcons
+                    name="chevron-right"
+                    color={'#888'}
+                    size={35}
+                  />
                 </View>
-                <MaterialCommunityIcons
-                  name="chevron-right"
-                  color={'#888'}
-                  size={35}
-                />
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            )}
             <View style={s.line} />
+
+            {this.props.auth.level !== 'seller' ? (
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate('addresslist');
+                }}>
+                <View style={s.accordian}>
+                  <View>
+                    <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+                      Shipping Address
+                    </Text>
+                    <Text style={{color: 'grey'}}>
+                      {address.length ? address.length : '0'} Address
+                    </Text>
+                  </View>
+                  <MaterialCommunityIcons
+                    name="chevron-right"
+                    color={'#888'}
+                    size={35}
+                  />
+                </View>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.navigate('addproduct');
+                }}>
+                <View style={s.accordian}>
+                  <View>
+                    <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+                      Add Product
+                    </Text>
+                    <Text style={{color: 'grey'}}>
+                      Add your new product here!
+                    </Text>
+                  </View>
+                  <MaterialCommunityIcons
+                    name="chevron-right"
+                    color={'#888'}
+                    size={35}
+                  />
+                </View>
+              </TouchableOpacity>
+            )}
+            <View style={s.line} />
+
             <TouchableOpacity
               onPress={() => {
                 // navigation.navigate('Setting')

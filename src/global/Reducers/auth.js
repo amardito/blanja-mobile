@@ -10,12 +10,14 @@ const authReducer = (prevState = defaultState, action) => {
       return {
         ...prevState,
         isLogin: true,
+        level: action.level,
       };
 
     case authLogoutType:
       return {
         ...prevState,
         isLogin: false,
+        level: null,
       };
 
     default:

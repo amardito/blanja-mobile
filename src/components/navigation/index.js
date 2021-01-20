@@ -17,7 +17,8 @@ import {Home, Profile, MyBag} from '../../screen';
 class main extends Component {
   loginAct = async () => {
     if ((await AsyncStorage.getItem('token')) !== null) {
-      this.props.dispatch(authLoginAction());
+      const data = JSON.parse(await AsyncStorage.getItem('token')).login_as;
+      this.props.dispatch(authLoginAction(data));
     }
     await SplashScreen.hide();
   };
@@ -56,20 +57,22 @@ class main extends Component {
             ),
           }}
         />
-        <Tab.Screen
-          name="mybag"
-          component={MyBag}
-          options={{
-            tabBarLabel: 'Bag',
-            tabBarIcon: ({color, size}) => (
-              <MaterialCommunityIcons
-                name="shopping"
-                color={color}
-                size={size}
-              />
-            ),
-          }}
-        />
+        {this.props.auth.level !== 'seller' && (
+          <Tab.Screen
+            name="mybag"
+            component={MyBag}
+            options={{
+              tabBarLabel: 'Bag',
+              tabBarIcon: ({color, size}) => (
+                <MaterialCommunityIcons
+                  name="shopping"
+                  color={color}
+                  size={size}
+                />
+              ),
+            }}
+          />
+        )}
         <Tab.Screen
           name="profile"
           component={Profile}
