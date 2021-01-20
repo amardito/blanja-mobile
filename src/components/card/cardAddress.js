@@ -10,7 +10,7 @@ import {getMyAddressAction} from '../../global/ActionCreators/address';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const api = axios.create({
-  baseURL: 'http://192.168.1.7:1010/api/v1/',
+  baseURL: 'http://192.168.1.6:1010/api/v1/',
 });
 
 const cardAddress = (props) => {

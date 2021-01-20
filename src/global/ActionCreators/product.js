@@ -6,7 +6,7 @@ import {
 } from '../actionType';
 
 const api = axios.create({
-  baseURL: 'http://192.168.1.7:1010/api/v1/',
+  baseURL: 'http://192.168.1.6:1010/api/v1/',
 });
 
 export const getNewProductAction = () => {

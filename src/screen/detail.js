@@ -161,7 +161,7 @@ class detail extends Component {
                   <View style={s.imageItems} key={index}>
                     <Image
                       source={{
-                        uri: `http://192.168.1.7:1010${value}`,
+                        uri: `http://192.168.1.6:1010${value}`,
                       }}
                       style={s.image}
                     />

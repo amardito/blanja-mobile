@@ -6,6 +6,7 @@ import Detail from './detail';
 import MyBag from './mybag';
 import Checkout from './checkout';
 import ShippingAddress from './shippingAddress';
+import MyOrder from './myOrder';
 export {
   Home,
   Auth,
@@ -15,4 +16,5 @@ export {
   MyBag,
   Checkout,
   ShippingAddress,
+  MyOrder,
 };

@@ -39,14 +39,14 @@ class cardBag extends Component {
   addOne() {
     if (this.state.number < this.state.max && this.state.selected === false) {
       this.setState({number: this.state.number + 1});
-      this.timer = setTimeout(this.addOne, -450);
+      this.timer = setTimeout(this.addOne, 500);
     }
   }
 
   subOne() {
     if (this.state.number > 1 && this.state.selected === false) {
       this.setState({number: this.state.number - 1});
-      this.timer = setTimeout(this.subOne, -450);
+      this.timer = setTimeout(this.subOne, 500);
     }
   }
 
@@ -136,17 +136,37 @@ class cardBag extends Component {
             style={{
               width: '100%',
               height: 104,
-              borderTopRightRadius: 15,
-              borderBottomRightRadius: this.state.selected ? 0 : 15,
-              borderTopLeftRadius: 15,
-              borderBottomLeftRadius: this.state.selected ? 0 : 15,
+              borderRadius: 15,
               overflow: 'hidden',
               backgroundColor: '#fff',
               elevation: this.state.selected ? 0 : 12,
-              borderBottomWidth: this.state.selected ? 5 : 0,
-              borderColor: this.state.selected ? '#DB3022' : '#fff',
               position: 'relative',
             }}>
+            {this.state.selected ? (
+              <MaterialCommunityIcons
+                style={{
+                  position: 'absolute',
+                  zIndex: 1,
+                  top: 15,
+                  right: 30,
+                }}
+                name="checkbox-marked"
+                color={'#DB3022'}
+                size={20}
+              />
+            ) : (
+              <MaterialCommunityIcons
+                style={{
+                  position: 'absolute',
+                  zIndex: 1,
+                  top: 15,
+                  right: 30,
+                }}
+                name="checkbox-blank-outline"
+                color={'#555'}
+                size={20}
+              />
+            )}
             {this.state.pop && (
               <View
                 onPress={() => {
@@ -190,7 +210,7 @@ class cardBag extends Component {
               <Image
                 style={s.img}
                 source={{
-                  uri: `http://192.168.1.7:1010${product_img}`,
+                  uri: `http://192.168.1.6:1010${product_img}`,
                 }}
               />
               <View style={{width: '67%', marginTop: 5}}>

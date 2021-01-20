@@ -28,7 +28,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import s from '../styles/profileStyle';
 
 const api = axios.create({
-  baseURL: 'http://192.168.1.7:1010/api/v1/',
+  baseURL: 'http://192.168.1.6:1010/api/v1/',
 });
 
 class profile extends Component {
@@ -164,14 +164,16 @@ class profile extends Component {
           <View style={{padding: 14}}>
             <TouchableOpacity
               onPress={() => {
-                // navigation.navigate('MyOrder')
+                this.props.navigation.navigate('myorder');
               }}>
               <View style={s.accordian}>
                 <View>
                   <Text style={{fontSize: 16, fontWeight: 'bold'}}>
                     My Order
                   </Text>
-                  <Text style={{color: 'grey'}}>Already have 12 orders</Text>
+                  <Text style={{color: 'grey'}}>
+                    See your history payment here!
+                  </Text>
                 </View>
                 <MaterialCommunityIcons
                   name="chevron-right"
@@ -211,7 +213,9 @@ class profile extends Component {
                   <Text style={{fontSize: 16, fontWeight: 'bold'}}>
                     Setting
                   </Text>
-                  <Text style={{color: 'grey'}}>Notification, password</Text>
+                  <Text style={{color: 'grey'}}>
+                    Notification, password, etc.
+                  </Text>
                 </View>
                 <MaterialCommunityIcons
                   name="chevron-right"

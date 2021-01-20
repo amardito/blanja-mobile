@@ -15,7 +15,7 @@ import {clearCheckoutAction} from '../global/ActionCreators/checkout';
 import s from '../styles/checkoutStyle';
 
 const api = axios.create({
-  baseURL: 'http://192.168.1.7:1010/api/v1/',
+  baseURL: 'http://192.168.1.6:1010/api/v1/',
 });
 
 export class Checkout extends Component {
@@ -29,7 +29,11 @@ export class Checkout extends Component {
     const {id_address} = this.props.checkout.address;
     const token = await AsyncStorage.getItem('token');
     const payload = [];
-    const prevData = this.props.bag.data;
+    const prevData = alasql(
+      'SELECT product_name, id_product, product_img, product_by, size, color, max_qty, product_price, SUM(CAST([item_qty] AS INT)) AS [item_qty] \
+    FROM ? GROUP BY id_product, product_img, product_by, product_name, size, color, max_qty, product_price',
+      [this.props.bag.data],
+    );
     let newData = [];
     await this.props.checkout.data.map(
       ({product_id, color, size, qty, price}) => {

@@ -53,7 +53,7 @@ class home extends Component {
                     {...this.props}
                     key={id_product}
                     id={id_product}
-                    image={`http://192.168.1.7:1010${
+                    image={`http://192.168.1.6:1010${
                       product_img.split(',')[0]
                     }`}
                     sold={product_sold}
@@ -94,7 +94,7 @@ class home extends Component {
                     {...this.props}
                     key={id_product}
                     id={id_product}
-                    image={`http://192.168.1.7:1010${
+                    image={`http://192.168.1.6:1010${
                       product_img.split(',')[0]
                     }`}
                     sold={product_sold}

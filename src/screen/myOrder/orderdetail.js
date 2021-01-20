@@ -41,7 +41,7 @@ const orderdetail = (props) => {
           history,
         ])[0].price
       : 0;
-  console.log(total);
+
   return (
     <>
       <Header style={styles.header}>
@@ -131,18 +131,14 @@ const orderdetail = (props) => {
         </Text>
         {history[0] !== undefined &&
           history.map(
-            ({
-              product_name,
-              price,
-              product_img,
-              color,
-              size,
-              qty,
-              product_by,
-            }) => {
+            (
+              {product_name, price, product_img, color, size, qty, product_by},
+              index,
+            ) => {
               return (
                 <>
                   <CardOrder
+                    key={index}
                     name={product_name}
                     by={product_by}
                     price={price}
@@ -211,7 +207,7 @@ const orderdetail = (props) => {
         <View style={{flexDirection: 'row', marginBottom: 10}}>
           <Text style={{color: 'gray', width: 125}}>Total Amount </Text>
           <Text style={{width: 215, fontWeight: 'bold'}}>
-            IDR{''}
+            IDR{' '}
             {Number(total)
               .toString()
               .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
