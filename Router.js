@@ -12,6 +12,7 @@ import {
   Detail,
   Checkout,
   ShippingAddress,
+  MyOrder,
 } from './src/screen';
 
 export default class App extends Component {
@@ -102,6 +103,17 @@ export default class App extends Component {
             <Stack.Screen
               name="selectaddress"
               component={ShippingAddress.SelectAddress}
+              options={{headerShown: false}}
+            />
+
+            <Stack.Screen
+              name="myorder"
+              component={MyOrder.OrderList}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="orderdetail"
+              component={MyOrder.OrderDetail}
               options={{headerShown: false}}
             />
           </Stack.Navigator>
