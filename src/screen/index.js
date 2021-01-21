@@ -7,6 +7,8 @@ import MyBag from './mybag';
 import Checkout from './checkout';
 import ShippingAddress from './shippingAddress';
 import MyOrder from './myOrder';
+import MyProduct from './myproduct';
+import AddProduct from './addproduct';
 export {
   Home,
   Auth,
@@ -17,4 +19,6 @@ export {
   Checkout,
   ShippingAddress,
   MyOrder,
+  MyProduct,
+  AddProduct,
 };
