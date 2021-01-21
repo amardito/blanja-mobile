@@ -1,7 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {Container, Form, Item, Input, Label, Button} from 'native-base';
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'http://192.168.1.6:1010/api/v1/',
+});
 
 import s from '../../styles/authStyle';
 
@@ -15,10 +20,71 @@ export default class signup extends Component {
       store: '',
       phone: '',
       password: '',
+      errMsg: '',
     };
   }
+
+  hanldeSignUp = async () => {
+    const mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-]/;
+    if (this.state.email === '') {
+      this.setState({errMsg: 'Fill your email first'});
+    } else if (!this.state.email.match(mailformat)) {
+      this.setState({errMsg: "Invalid email format ['@', '.', 'domain']"});
+    } else if (this.state.password === '') {
+      this.setState({errMsg: 'Fill your password first'});
+    } else {
+      const payload =
+        this.state.level === 2
+          ? JSON.stringify({
+              username: this.state.username,
+              email: this.state.email,
+              password: this.state.password,
+              level: this.state.level,
+              store: this.state.store,
+              phone: this.state.phone,
+            })
+          : JSON.stringify({
+              username: this.state.username,
+              email: this.state.email,
+              password: this.state.password,
+              level: this.state.level,
+            });
+
+      console.log(`\n
+      Creating user data...
+      `);
+
+      await api
+        .post('auth/register', payload, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(async () => {
+          Alert.alert('Success register');
+
+          this.props.navigation.navigate('signin');
+        })
+        .catch((e) => {
+          console.log(e.response);
+          if (e.response.data.error === 'email already exists') {
+            Alert.alert('Failed register', 'email already exists');
+            this.setState({
+              email: '',
+            });
+          }
+          if (
+            e.response.data.error === "Duplicate entry 'store' for key 'store'"
+          ) {
+            Alert.alert('Failed register', 'Store name already taken');
+            this.setState({
+              store: '',
+            });
+          }
+        });
+    }
+  };
   render() {
-    console.log(this.state);
     return (
       <View style={s.containerFull}>
         <ScrollView>
@@ -91,7 +157,7 @@ export default class signup extends Component {
                 fontSize: 15,
                 textAlign: 'right',
               }}>
-              {'this is error'}
+              {this.state.errMsg}
             </Text>
             <Form>
               <Item floatingLabel style={s.inputBox}>
@@ -103,6 +169,7 @@ export default class signup extends Component {
                   onChangeText={(e) =>
                     this.setState({
                       username: e,
+                      errMsg: '',
                     })
                   }
                 />
@@ -117,6 +184,7 @@ export default class signup extends Component {
                   onChangeText={(e) =>
                     this.setState({
                       email: e,
+                      errMsg: '',
                     })
                   }
                 />
@@ -132,6 +200,7 @@ export default class signup extends Component {
                     onChangeText={(e) =>
                       this.setState({
                         store: e,
+                        errMsg: '',
                       })
                     }
                   />
@@ -148,6 +217,7 @@ export default class signup extends Component {
                     onChangeText={(e) =>
                       this.setState({
                         phone: e,
+                        errMsg: '',
                       })
                     }
                   />
@@ -163,6 +233,7 @@ export default class signup extends Component {
                   onChangeText={(e) =>
                     this.setState({
                       password: e,
+                      errMsg: '',
                     })
                   }
                 />
@@ -174,7 +245,14 @@ export default class signup extends Component {
                   }}>
                   <Text>Already have an account ?</Text>
                 </TouchableOpacity>
-                <Button style={s.buttonStyle} rounded danger block>
+                <Button
+                  style={s.buttonStyle}
+                  rounded
+                  danger
+                  block
+                  onPress={() => {
+                    this.hanldeSignUp();
+                  }}>
                   <Text style={s.whiteText}>SIGN UP</Text>
                 </Button>
               </View>

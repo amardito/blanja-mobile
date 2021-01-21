@@ -12,7 +12,7 @@ import {authLoginAction} from '../../global/ActionCreators/auth';
 import {getMyBagAction} from '../../global/ActionCreators/bag';
 import {getCheckoutAction} from '../../global/ActionCreators/checkout';
 
-import {Home, Profile, MyBag} from '../../screen';
+import {Home, Profile, MyBag, Shop} from '../../screen';
 
 class main extends Component {
   loginAct = async () => {
@@ -57,6 +57,20 @@ class main extends Component {
             ),
           }}
         />
+        <Tab.Screen
+          name="shop"
+          component={Shop.Main}
+          options={{
+            tabBarLabel: 'Shop',
+            tabBarIcon: ({color, size}) => (
+              <MaterialCommunityIcons
+                name="cart-outline"
+                color={color}
+                size={size}
+              />
+            ),
+          }}
+        />
         {this.props.auth.level !== 'seller' && (
           <Tab.Screen
             name="mybag"
@@ -73,6 +87,7 @@ class main extends Component {
             }}
           />
         )}
+
         <Tab.Screen
           name="profile"
           component={Profile}

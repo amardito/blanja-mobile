@@ -36,7 +36,7 @@ import {connect} from 'react-redux';
 import {
   getNewProductAction,
   getPopularProductAction,
-} from '../../global/ActionCreators/product';
+} from '../global/ActionCreators/product';
 
 class AddProduct extends React.Component {
   constructor(props) {
@@ -118,7 +118,6 @@ class AddProduct extends React.Component {
       });
     }
 
-    console.log(data);
     axios
       .post('http://192.168.1.6:1010/api/v1' + '/product/create', data, config)
       .then((res) => {
@@ -141,11 +140,6 @@ class AddProduct extends React.Component {
       product_desc,
       product_img,
     } = this.state;
-    console.log(this.state);
-
-    console.log(
-      this.state.color[0] !== undefined && this.state.color.join(','),
-    );
 
     const categoryItems = [
       {label: 'T-Shirt', value: '1'},
