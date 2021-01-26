@@ -14,7 +14,7 @@ const Shop = ({navigation}) => {
   }, []);
   const getCategory = () => {
     axios
-      .get('http://192.168.1.6:1010/api/v1/category')
+      .get('http://192.168.1.15:1010/api/v1/category')
       .then(({data}) => {
         //console.log(data.data);
         setCategory(data.data);
@@ -30,7 +30,9 @@ const Shop = ({navigation}) => {
       <TouchableOpacity
         style={styles.viewAll}
         onPress={() =>
-          navigation.navigate('Catalog', {title: 'View All Items', keyword: ''})
+          navigation.navigate('catalog', {
+            title: 'View All Items',
+          })
         }>
         <Text style={{color: '#ffffff'}}>VIEW ALL ITEMS</Text>
       </TouchableOpacity>

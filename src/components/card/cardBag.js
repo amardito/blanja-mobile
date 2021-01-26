@@ -210,7 +210,7 @@ class cardBag extends Component {
               <Image
                 style={s.img}
                 source={{
-                  uri: `http://192.168.1.6:1010${product_img}`,
+                  uri: `http://192.168.1.15:1010${product_img}`,
                 }}
               />
               <View style={{width: '67%', marginTop: 5}}>

@@ -5,7 +5,7 @@ import {Container, Form, Item, Input, Label, Button} from 'native-base';
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://192.168.1.6:1010/api/v1/',
+  baseURL: 'http://192.168.1.15:1010/api/v1/',
 });
 
 import s from '../../styles/authStyle';

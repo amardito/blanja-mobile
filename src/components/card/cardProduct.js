@@ -14,7 +14,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const api = axios.create({
-  baseURL: 'http://192.168.1.6:1010/api/v1/',
+  baseURL: 'http://192.168.1.15:1010/api/v1/',
 });
 
 class CardBag extends Component {
@@ -115,7 +115,7 @@ class CardBag extends Component {
         )}
         <Image
           source={{
-            uri: 'http://192.168.1.6:1010/' + image,
+            uri: 'http://192.168.1.15:1010/' + image,
             width: 120,
             height: 120,
           }}

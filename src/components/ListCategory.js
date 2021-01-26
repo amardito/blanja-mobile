@@ -7,7 +7,7 @@ const ListCategory = ({title, navigation, keyword}) => {
     <TouchableOpacity
       style={styles.container}
       onPress={() =>
-        navigation.navigate('catalog', {title: title, keyword: keyword})
+        navigation.navigate('catalog', {title: title, category: keyword})
       }>
       <View style={styles.ListBar}>
         <Text style={styles.text}>{title}</Text>

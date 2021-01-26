@@ -119,7 +119,7 @@ class AddProduct extends React.Component {
     }
 
     axios
-      .post('http://192.168.1.6:1010/api/v1' + '/product/create', data, config)
+      .post('http://192.168.1.15:1010/api/v1' + '/product/create', data, config)
       .then((res) => {
         console.log(res);
         Alert.alert('Success add new product');
