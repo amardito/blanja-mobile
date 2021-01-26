@@ -13,6 +13,7 @@ import {connect} from 'react-redux';
 import {getMyBagAction} from '../../global/ActionCreators/bag';
 import {getCheckoutAction} from '../../global/ActionCreators/checkout';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import alasql from 'alasql';
 
 import s from '../../styles/cardBagStyle';
 
@@ -55,8 +56,12 @@ class cardBag extends Component {
   }
 
   handleDelete = async () => {
-    let newData = JSON.parse(await AsyncStorage.getItem('belanjaUser'));
-    newData.splice(this.props.index, 1);
+    let newData = alasql(
+      'SELECT product_name, id_product, product_img, product_by, size, color, max_qty, product_price, SUM(CAST([item_qty] AS INT)) AS [item_qty] \
+    FROM ? GROUP BY id_product, product_img, product_by, product_name, size, color, max_qty, product_price',
+      [JSON.parse(await AsyncStorage.getItem('belanjaUser'))],
+    );
+    newData = newData.filter((item, index) => index !== this.props.index);
     await AsyncStorage.setItem('belanjaUser', JSON.stringify(newData));
     this.props.dispatch(getMyBagAction());
   };

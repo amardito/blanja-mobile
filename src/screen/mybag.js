@@ -7,6 +7,7 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {connect} from 'react-redux';
@@ -30,8 +31,22 @@ class mybag extends Component {
           : (console.log('      failed'),
             navigation.reset({
               index: 0,
-              routes: [{name: 'mainscreen'}, {name: 'signup'}],
-            }));
+              routes: [{name: 'mainscreen'}],
+            }),
+            Alert.alert(
+              'Restricted Feature',
+              'Please Login First',
+              [
+                {text: 'Later'},
+                {
+                  text: 'Login Now',
+                  onPress: () => {
+                    navigation.navigate('signup');
+                  },
+                },
+              ],
+              {cancelable: true},
+            ));
       } catch (error) {
         // Error get data
         console.log(error);
