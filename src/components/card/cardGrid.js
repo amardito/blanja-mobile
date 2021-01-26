@@ -9,16 +9,16 @@ import s from '../../styles/cardGridStyle';
 
 class cardGrid extends Component {
   render() {
-    const {id, image, sold, owner, name, price, badge} = this.props;
+    const {id, image, sold, owner, name, price, badge, category} = this.props;
     return (
       <TouchableOpacity
         style={s.items}
-        onPress={async () => {
+        onPress={() => {
           console.log(`\n
           getting item of id : ${String(id)} ...
           \n`);
-          await this.props.dispatch(getSingleProductAction(String(id)));
-          this.props.navigation.navigate('detail');
+          this.props.dispatch(getSingleProductAction(String(id)));
+          this.props.navigation.navigate('detail', {category: category});
         }}>
         <>
           <View style={s.itemsHeader}>

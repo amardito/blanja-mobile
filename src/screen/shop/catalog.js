@@ -18,28 +18,38 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import ActionSheet from 'react-native-actions-sheet';
 
 const Catalog = ({navigation, route}) => {
-  let {title, category, search, color, size} = route.params;
+  let {title, category, search, color, size, SortBy, Sort} = route.params;
   const [viewall, setViewall] = useState([]);
-  const [sortby, setsortby] = useState(undefined);
-  const [sort, setsort] = useState(undefined);
-  const [SelectedSort, setSelectedSort] = useState(0);
+  const [sortby, setsortby] = useState(SortBy);
+  const [sort, setsort] = useState(Sort);
+  const [SelectedSort, setSelectedSort] = useState(
+    sortby === 'popular' ? 1 : sortby === 'latest' && 2,
+  );
+
   //viewall
   useEffect(() => {
     // code to run on component mount
+    setViewall([]);
     getViewAll();
-  }, [category, search, color, size, sortby, sort]);
+  }, [category, search, color, size, sortby, sort, SelectedSort]);
 
   const getViewAll = () => {
-    if (
-      title === 'View All Items' &&
-      search === undefined &&
-      color === undefined &&
-      size === undefined &&
-      sortby === undefined &&
-      category === undefined
-    ) {
+    if (title === 'View All Items') {
       axios
-        .get('http://192.168.1.15:1010/api/v1/search?name=')
+        .get(
+          `http://192.168.1.15:1010/api/v1/search?name=&sortby=${sortby}&sort=${sort}`,
+        )
+        .then(({data}) => {
+          setViewall(data.data.values);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (title === 'New' || title === 'Popular') {
+      axios
+        .get(
+          `http://192.168.1.15:1010/api/v1/search?name=&sortby=${sortby}&sort=${sort}`,
+        )
         .then(({data}) => {
           setViewall(data.data.values);
         })
@@ -47,29 +57,16 @@ const Catalog = ({navigation, route}) => {
           console.log(err);
         });
     } else {
-      if (sortby !== undefined) {
-        axios
-          .get(
-            `http://192.168.1.15:1010/api/v1/search?name=${search}&category=${category}&color=${color}&size=${size}&sortby=${sortby}&sort=${sort}`,
-          )
-          .then(({data}) => {
-            setViewall(data.data.values);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      } else {
-        axios
-          .get(
-            `http://192.168.1.15:1010/api/v1/search?name=${search}&category=${category}&color=${color}&size=${size}`,
-          )
-          .then(({data}) => {
-            setViewall(data.data.values);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
+      axios
+        .get(
+          `http://192.168.1.15:1010/api/v1/search?name=${search}&category=${category}&color=${color}&size=${size}&sortby=${sortby}&sort=${sort}`,
+        )
+        .then(({data}) => {
+          setViewall(data.data.values);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
 
@@ -90,52 +87,68 @@ const Catalog = ({navigation, route}) => {
                 size: size !== undefined ? size.split('|') : [],
               })
             }>
-            <View style={{marginRight: 15}}>
+            <View style={{marginRight: 10}}>
               <MaterialCommunityIcons
                 name="filter-variant"
                 color={'#555'}
                 size={27}
               />
             </View>
-            <Text>Filter</Text>
+            <Text style={{fontSize: 15}}>Filter</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.filter}>
-            <Text
-              onPress={() => {
-                actionSheetRef.current?.setModalVisible();
-              }}>
-              Sort
-            </Text>
+          <TouchableOpacity
+            style={styles.filter}
+            onPress={() => {
+              actionSheetRef.current?.setModalVisible();
+            }}>
+            <View style={{marginRight: 10}}>
+              <MaterialCommunityIcons
+                name="compare-vertical"
+                color={'#555'}
+                size={27}
+              />
+            </View>
+            <Text style={{fontSize: 15}}>Sort</Text>
           </TouchableOpacity>
         </View>
       </View>
       <View style={{marginHorizontal: windowWidth * 0.04, marginVertical: 10}}>
-        <ScrollView>
-          {viewall[0] !== undefined &&
-            viewall.map(
-              ({
-                id_product,
-                product_name,
-                product_by,
-                product_price,
-                product_img,
-              }) => {
-                return (
-                  <CardCatalog
-                    key={id_product}
-                    itemId={id_product}
-                    name={product_name}
-                    brand={product_by}
-                    price={product_price}
-                    image={product_img.split(',')[0]}
-                    navigation={navigation}
-                  />
-                );
-              },
-            )}
+        {viewall.length ? (
+          <ScrollView>
+            {viewall[0] !== undefined &&
+              viewall.map(
+                ({
+                  id_product,
+                  product_name,
+                  product_by,
+                  product_price,
+                  product_img,
+                  category_id,
+                }) => {
+                  return (
+                    <CardCatalog
+                      key={id_product}
+                      itemId={id_product}
+                      name={product_name}
+                      brand={product_by}
+                      price={product_price}
+                      image={product_img.split(',')[0]}
+                      category={category_id}
+                      navigation={navigation}
+                    />
+                  );
+                },
+              )}
 
-          <View style={styles.gap} />
-        </ScrollView>
+            <View style={styles.gap} />
+          </ScrollView>
+        ) : (
+          <View style={{paddingTop: 5, paddingRight: 30}}>
+            <Text style={{fontSize: 20, color: 'gray', alignSelf: 'center'}}>
+              Getting some result data for {title}
+            </Text>
+          </View>
+        )}
         <ActionSheet ref={actionSheetRef}>
           <View style={styles.sort}>
             <Text
@@ -149,50 +162,78 @@ const Catalog = ({navigation, route}) => {
             <TouchableOpacity
               style={{
                 ...styles.btnsheet,
-                backgroundColor: SelectedSort === 1 ? 'lightgray' : '#fff',
+                backgroundColor: SelectedSort === 1 ? '#DB3022' : '#fff',
               }}
               onPress={() => {
                 setsortby('popular');
-                setsort('ASC');
+                setsort('DESC');
                 setSelectedSort(1);
+                setViewall([]);
               }}>
-              <Text style={styles.textFilter}>Popular</Text>
+              <Text
+                style={{
+                  ...styles.textFilter,
+                  color: SelectedSort === 1 ? '#fff' : '#333',
+                }}>
+                Popular
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{
                 ...styles.btnsheet,
-                backgroundColor: SelectedSort === 2 ? 'lightgray' : '#fff',
+                backgroundColor: SelectedSort === 2 ? '#DB3022' : '#fff',
               }}
               onPress={() => {
-                setsortby('popular');
-                setsort('ASC');
+                setsortby('latest');
+                setsort('DESC');
                 setSelectedSort(2);
+                setViewall([]);
               }}>
-              <Text style={styles.textFilter}>Newest</Text>
+              <Text
+                style={{
+                  ...styles.textFilter,
+                  color: SelectedSort === 2 ? '#fff' : '#333',
+                }}>
+                Newest
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{
                 ...styles.btnsheet,
-                backgroundColor: SelectedSort === 3 ? 'lightgray' : '#fff',
+                backgroundColor: SelectedSort === 3 ? '#DB3022' : '#fff',
               }}
               onPress={() => {
                 setsortby('price');
                 setsort('ASC');
                 setSelectedSort(3);
+                setViewall([]);
               }}>
-              <Text style={styles.textFilter}>Price: lowest to high</Text>
+              <Text
+                style={{
+                  ...styles.textFilter,
+                  color: SelectedSort === 3 ? '#fff' : '#333',
+                }}>
+                Price: lowest to high
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={{
                 ...styles.btnsheet,
-                backgroundColor: SelectedSort === 4 ? 'lightgray' : '#fff',
+                backgroundColor: SelectedSort === 4 ? '#DB3022' : '#fff',
               }}
               onPress={() => {
                 setsortby('price');
                 setsort('DESC');
                 setSelectedSort(4);
+                setViewall([]);
               }}>
-              <Text style={styles.textFilter}>Price: highest to low</Text>
+              <Text
+                style={{
+                  ...styles.textFilter,
+                  color: SelectedSort === 4 ? '#fff' : '#333',
+                }}>
+                Price: highest to low
+              </Text>
             </TouchableOpacity>
           </View>
         </ActionSheet>
@@ -209,7 +250,6 @@ const styles = StyleSheet.create({
   wrapfilter: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    height: 50,
     backgroundColor: '#f0f0f0',
   },
   head: {
@@ -226,8 +266,9 @@ const styles = StyleSheet.create({
   },
   sort: {
     height: windowHeight * 0.5,
-    marginHorizontal: windowWidth * 0.04,
     backgroundColor: '#fff',
+    borderTopRightRadius: 100,
+    borderTopLeftRadius: 100,
   },
   textFilter: {
     fontSize: 16,
@@ -237,8 +278,8 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     backgroundColor: '#fff',
     height: 40,
-    paddingHorizontal: 10,
     justifyContent: 'center',
+    paddingHorizontal: windowWidth * 0.04 + 10,
   },
   btnsheetAct: {
     backgroundColor: '#DB3022',

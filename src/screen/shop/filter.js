@@ -14,7 +14,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {useState} from 'react';
 import {useEffect} from 'react';
 const Filter = ({navigation, route}) => {
-  console.log(route.params);
   const [color, setcolor] = useState(route.params.color);
   const [size, setsize] = useState(route.params.size);
   const [category, setcategory] = useState(route.params.category);

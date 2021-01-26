@@ -12,6 +12,7 @@ const CardCatalog = ({
   price,
   image,
   itemId,
+  category,
   navigation,
   dispatch,
 }) => {
@@ -20,12 +21,12 @@ const CardCatalog = ({
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={async () => {
+      onPress={() => {
         console.log(`\n
         getting item of id : ${String(itemId)} ...
         \n`);
-        await dispatch(getSingleProductAction(String(itemId)));
-        navigation.navigate('detail');
+        dispatch(getSingleProductAction(String(itemId)));
+        navigation.navigate('detail', {category: category});
       }}>
       <Image source={imgs} style={styles.img} />
       <View style={styles.infobag}>

@@ -31,7 +31,14 @@ class home extends Component {
           <Text style={s.textSubHeader}>New</Text>
           <View style={s.textSpan}>
             <Text>You've never seen it before!</Text>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('catalog', {
+                  title: 'New',
+                  SortBy: 'latest',
+                  Sort: 'Desc',
+                });
+              }}>
               <Text>View all</Text>
             </TouchableOpacity>
           </View>
@@ -48,6 +55,7 @@ class home extends Component {
                   product_by,
                   product_name,
                   product_price,
+                  category_id,
                 }) => (
                   <Card
                     {...this.props}
@@ -60,6 +68,7 @@ class home extends Component {
                     owner={product_by}
                     name={product_name}
                     price={product_price}
+                    category={category_id}
                     badge={'NEW'}
                   />
                 ),
@@ -72,7 +81,14 @@ class home extends Component {
           <Text style={s.textSubHeader}>Popular</Text>
           <View style={s.textSpan}>
             <Text>Tranding items</Text>
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.navigate('catalog', {
+                  title: 'Popular',
+                  SortBy: 'popular',
+                  Sort: 'Desc',
+                });
+              }}>
               <Text>View all</Text>
             </TouchableOpacity>
           </View>
@@ -89,6 +105,7 @@ class home extends Component {
                   product_by,
                   product_name,
                   product_price,
+                  category_id,
                 }) => (
                   <Card
                     {...this.props}
@@ -101,6 +118,7 @@ class home extends Component {
                     owner={product_by}
                     name={product_name}
                     price={product_price}
+                    category={category_id}
                     badge={false}
                   />
                 ),

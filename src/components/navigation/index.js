@@ -30,10 +30,16 @@ class main extends Component {
     if ((await this.props.product.popularProduct.values) === undefined) {
       await this.props.dispatch(getPopularProductAction());
     }
-    if ((await AsyncStorage.getItem('belanjaUser')) !== null) {
+    if (
+      (await AsyncStorage.getItem('belanjaUser')) !== null &&
+      (await AsyncStorage.getItem('token')) !== null
+    ) {
       await this.props.dispatch(getMyBagAction());
     }
-    if ((await AsyncStorage.getItem('checkout')) !== null) {
+    if (
+      (await AsyncStorage.getItem('checkout')) !== null &&
+      (await AsyncStorage.getItem('token')) !== null
+    ) {
       await this.props.dispatch(getCheckoutAction());
     }
     await this.loginAct();

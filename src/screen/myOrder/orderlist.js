@@ -84,7 +84,8 @@ const orderlist = (props) => {
         <View style={styles.titlewrap}>
           <Text style={styles.title}>My Orders</Text>
         </View>
-        {history.length !== 0 &&
+
+        {history.length !== 0 ? (
           history.map(
             ({id_payment, price, qty, track_id, status, created_at}, index) => {
               const date = String(created_at).split('T')[0].split('-');
@@ -132,7 +133,14 @@ const orderlist = (props) => {
                 </TouchableOpacity>
               );
             },
-          )}
+          )
+        ) : (
+          <View style={{paddingTop: 15, paddingLeft: 20}}>
+            <Text style={{fontSize: 15, color: 'dimgray'}}>
+              You don't have a recent order checkout
+            </Text>
+          </View>
+        )}
         <View style={{marginBottom: 25}} />
       </ScrollView>
     </>
