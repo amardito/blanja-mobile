@@ -15,7 +15,7 @@ import {
   MyOrder,
   MyProduct,
   AddProduct,
-  Catalog,
+  Shop,
 } from './src/screen';
 
 export default class App extends Component {
@@ -133,7 +133,17 @@ export default class App extends Component {
 
             <Stack.Screen
               name="catalog"
-              component={Catalog}
+              component={Shop.Catalog}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Search"
+              component={Shop.Search}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Filter"
+              component={Shop.Filter}
               options={{headerShown: false}}
             />
           </Stack.Navigator>
