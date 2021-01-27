@@ -16,6 +16,8 @@ import {
   MyProduct,
   AddProduct,
   Shop,
+  SettingProfile,
+  EditProduct,
 } from './src/screen';
 
 export default class App extends Component {
@@ -83,6 +85,12 @@ export default class App extends Component {
             />
 
             <Stack.Screen
+              name="setting"
+              component={SettingProfile}
+              options={{headerShown: false}}
+            />
+
+            <Stack.Screen
               name="checkout"
               component={Checkout}
               options={{headerShown: false}}
@@ -128,6 +136,11 @@ export default class App extends Component {
             <Stack.Screen
               name="addproduct"
               component={AddProduct}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="editproduct"
+              component={EditProduct}
               options={{headerShown: false}}
             />
 

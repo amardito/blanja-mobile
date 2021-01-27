@@ -9,6 +9,7 @@ import ShippingAddress from './shippingAddress';
 import MyOrder from './myOrder';
 import MyProduct from './myproduct';
 import AddProduct from './addproduct';
+import EditProduct from './editproduct';
 import Shop from './shop';
 import SettingProfile from './setting';
 export {
@@ -23,6 +24,7 @@ export {
   MyOrder,
   MyProduct,
   AddProduct,
+  EditProduct,
   Shop,
   SettingProfile,
 };

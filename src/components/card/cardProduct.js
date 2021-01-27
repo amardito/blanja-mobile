@@ -13,6 +13,13 @@ import axios from 'axios';
 
 import AsyncStorage from '@react-native-community/async-storage';
 
+import {connect} from 'react-redux';
+
+import {
+  getNewProductAction,
+  getPopularProductAction,
+} from '../../global/ActionCreators/product';
+
 const api = axios.create({
   baseURL: 'http://192.168.1.15:1010/api/v1/',
 });
@@ -34,6 +41,8 @@ class CardBag extends Component {
       })
       .then(() => {
         this.props.getAll();
+        this.props.dispatch(getNewProductAction());
+        this.props.dispatch(getPopularProductAction());
       })
       .catch((e) => {
         console.log(e);
@@ -66,13 +75,13 @@ class CardBag extends Component {
             }}>
             <TouchableOpacity
               onPress={() => {
-                this.props.navigation.navigate('EditProduct', {
+                this.props.navigation.navigate('editproduct', {
                   itemId: id,
                 });
               }}
               style={{
                 elevation: 10,
-                backgroundColor: '#81DE5D',
+                backgroundColor: '#F0E900',
                 padding: 10,
                 paddingHorizontal: 23,
                 borderRadius: 8,
@@ -166,7 +175,7 @@ class CardBag extends Component {
   }
 }
 
-export default CardBag;
+export default connect()(CardBag);
 
 const styles = StyleSheet.create({
   container: {

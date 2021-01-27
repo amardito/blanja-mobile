@@ -41,7 +41,7 @@ import {
   getPopularProductAction,
 } from '../global/ActionCreators/product';
 
-class AddProduct extends React.Component {
+class EditProduct extends React.Component {
   constructor(props) {
     super(props);
 
@@ -57,6 +57,33 @@ class AddProduct extends React.Component {
       taken_pic: {},
     };
   }
+
+  getProduct = () => {
+    const {itemId} = this.props.route.params;
+
+    axios
+      .get('http://192.168.1.15:1010/api/v1' + `/product/${itemId}`)
+      .then(({data}) => {
+        const {product, color, size} = data.data;
+        console.log('product', product);
+        console.log('color', color);
+        console.log('size', size);
+        this.setState({
+          product_name: product.product_name,
+          product_price: String(product.product_price),
+          qty: String(product.product_qty),
+          category_id: product.category_id,
+          color: color.map(({color_id}) => {
+            return color_id;
+          }),
+          size: size.map(({size_id}) => {
+            return size_id;
+          }),
+          product_desc: product.product_desc,
+          product_img: product.product_img,
+        });
+      });
+  };
 
   chooseFile = () => {
     ImagePicker.openPicker({
@@ -87,6 +114,7 @@ class AddProduct extends React.Component {
   };
 
   postProduct = async () => {
+    const {itemId} = this.props.route.params;
     const channel = 'notif';
     const token = await AsyncStorage.getItem('token');
     const config = {
@@ -114,29 +142,40 @@ class AddProduct extends React.Component {
         type: this.state.taken_pic.mime,
         uri: this.state.taken_pic.path,
       });
-    for (let i = 0; i < this.state.product_img.length; i++) {
-      data.append('product_img', {
-        name: this.state.product_img[i].path.split('/').pop(),
-        type: this.state.product_img[i].mime,
-        uri: this.state.product_img[i].path,
-      });
+    if (this.state.product_img[0].path !== undefined) {
+      for (let i = 0; i < this.state.product_img.length; i++) {
+        data.append('product_img', {
+          name: this.state.product_img[i].path.split('/').pop(),
+          type: this.state.product_img[i].mime,
+          uri: this.state.product_img[i].path,
+        });
+      }
     }
 
     axios
-      .post('http://192.168.1.15:1010/api/v1' + '/product/create', data, config)
+      .put(
+        'http://192.168.1.15:1010/api/v1' + `/product/update/${itemId}`,
+        data,
+        config,
+      )
       .then(() => {
-        showNotification('Notification', 'Add Product Success', channel);
+        showNotification(
+          'Notification',
+          `Edit product ${this.state.product_name} Successfully`,
+          channel,
+        );
         this.props.dispatch(getNewProductAction());
         this.props.dispatch(getPopularProductAction());
         this.props.navigation.navigate('profile');
       })
       .catch((err) => {
         console.log(err);
-        Alert.alert('Failed add new product');
+        Alert.alert('Failed update product');
       });
   };
 
   componentDidMount() {
+    this.getProduct();
     PushNotification.createChannel(
       {
         channelId: 'notif',
@@ -185,6 +224,8 @@ class AddProduct extends React.Component {
       {label: 'xl', value: '5'},
     ];
 
+    console.log('state', this.state);
+
     return (
       <Container style={styles.container}>
         <Header style={styles.header}>
@@ -215,7 +256,7 @@ class AddProduct extends React.Component {
                 fontSize: 20,
                 left: 50,
               }}>
-              {'Add Product'}
+              {'Edit Product'}
             </Title>
           </Body>
           <Right>
@@ -431,19 +472,30 @@ class AddProduct extends React.Component {
                         marginBottom: 5,
                       }}>
                       <ScrollView horizontal={true}>
-                        {product_img &&
-                          product_img.map((item) => {
-                            return (
-                              <Image
-                                key={product_img.indexOf(item)}
-                                source={{
-                                  uri:
-                                    product_img.length !== 0 ? item.path : '',
-                                }}
-                                style={styles.imageStyle}
-                              />
-                            );
-                          })}
+                        {product_img[0].path !== undefined
+                          ? product_img.map((item) => {
+                              return (
+                                <Image
+                                  key={product_img.indexOf(item)}
+                                  source={{
+                                    uri:
+                                      product_img.length !== 0 ? item.path : '',
+                                  }}
+                                  style={styles.imageStyle}
+                                />
+                              );
+                            })
+                          : product_img.map((item, index) => {
+                              return (
+                                <Image
+                                  key={index}
+                                  source={{
+                                    uri: 'http://192.168.1.15:1010/' + item,
+                                  }}
+                                  style={styles.imageStyle}
+                                />
+                              );
+                            })}
                       </ScrollView>
                     </View>
                     {this.state.taken_pic.path !== undefined && (
@@ -505,7 +557,7 @@ const mapStateToProps = ({auth}) => {
   };
 };
 
-export default connect(mapStateToProps)(AddProduct);
+export default connect(mapStateToProps)(EditProduct);
 
 const styles = StyleSheet.create({
   header: {
