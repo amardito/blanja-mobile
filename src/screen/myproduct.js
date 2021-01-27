@@ -10,7 +10,7 @@ import {
   Right,
   Body,
 } from 'native-base';
-import {StatusBar, StyleSheet} from 'react-native';
+import {StatusBar, StyleSheet, Text, View} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import CardProduct from '../components/card/cardProduct';
 import axios from 'axios';
@@ -36,7 +36,13 @@ class ListProduct extends Component {
       .then(({data}) => {
         this.setState({products: data.data.values});
       })
-      .catch((err) => console.error(err.response.data));
+      .catch((err) => {
+        if (err.response.data.message === 'data not found') {
+          this.setState({products: []});
+        } else {
+          console.error(err);
+        }
+      });
   };
 
   refresh = () => {
@@ -94,7 +100,13 @@ class ListProduct extends Component {
             </Right>
           </Header>
           <Content style={{backgroundColor: '#f0f0f0', marginVertical: 20}}>
-            {products[0] !== undefined &&
+            {products[0] === undefined ? (
+              <View style={{marginTop: 20}}>
+                <Text style={{fontSize: 20, alignSelf: 'center'}}>
+                  Add some Product
+                </Text>
+              </View>
+            ) : (
               products.map(
                 (
                   {
@@ -121,7 +133,8 @@ class ListProduct extends Component {
                     />
                   );
                 },
-              )}
+              )
+            )}
           </Content>
         </Container>
       </>

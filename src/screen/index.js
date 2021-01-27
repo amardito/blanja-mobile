@@ -10,6 +10,7 @@ import MyOrder from './myOrder';
 import MyProduct from './myproduct';
 import AddProduct from './addproduct';
 import Shop from './shop';
+import SettingProfile from './setting';
 export {
   Home,
   Auth,
@@ -23,4 +24,5 @@ export {
   MyProduct,
   AddProduct,
   Shop,
+  SettingProfile,
 };

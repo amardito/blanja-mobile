@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
 import {
+  Alert,
   ScrollView,
   StatusBar,
   Text,
@@ -48,8 +49,22 @@ class profile extends Component {
           : (console.log('      failed'),
             navigation.reset({
               index: 0,
-              routes: [{name: 'mainscreen'}, {name: 'signup'}],
-            }));
+              routes: [{name: 'mainscreen'}],
+            }),
+            Alert.alert(
+              'Restricted Feature',
+              'Please Login First',
+              [
+                {text: 'Later'},
+                {
+                  text: 'Login Now',
+                  onPress: () => {
+                    navigation.navigate('signup');
+                  },
+                },
+              ],
+              {cancelable: true},
+            ));
       } catch (error) {
         // Error get data
         console.log(error);
@@ -254,7 +269,9 @@ class profile extends Component {
 
             <TouchableOpacity
               onPress={() => {
-                // navigation.navigate('Setting')
+                this.props.navigation.navigate('setting', {
+                  email: email,
+                });
               }}>
               <View style={s.accordian}>
                 <View>
@@ -291,7 +308,17 @@ class profile extends Component {
                 alignItems: 'center',
                 elevation: 5,
               }}
-              onPress={() => this.logoutHandle()}>
+              onPress={() =>
+                Alert.alert(
+                  'Logout',
+                  'Are you sure want logout?',
+                  [
+                    {text: 'No'},
+                    {text: 'Yes', onPress: () => this.logoutHandle()},
+                  ],
+                  {cancelable: true},
+                )
+              }>
               <Text style={{color: 'white', fontWeight: '700'}}>LOGOUT</Text>
             </TouchableOpacity>
           </View>

@@ -66,19 +66,16 @@ export default class signup extends Component {
           this.props.navigation.navigate('signin');
         })
         .catch((e) => {
-          console.log(e.response);
           if (e.response.data.error === 'email already exists') {
-            Alert.alert('Failed register', 'email already exists');
             this.setState({
               email: '',
+              errMsg: 'email already exists',
             });
           }
-          if (
-            e.response.data.error === "Duplicate entry 'store' for key 'store'"
-          ) {
-            Alert.alert('Failed register', 'Store name already taken');
+          if (e.response.data.message === 'Conflict Data') {
             this.setState({
               store: '',
+              errMsg: 'Store name already taken',
             });
           }
         });
@@ -122,7 +119,7 @@ export default class signup extends Component {
                     color: this.state.level === 1 ? '#fff' : '#DB3022',
                     fontSize: 15,
                   }}>
-                  Consumer
+                  Costumer
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -180,6 +177,7 @@ export default class signup extends Component {
                   Email
                 </Label>
                 <Input
+                  keyboardType={'email-address'}
                   style={s.inputStyle}
                   onChangeText={(e) =>
                     this.setState({
@@ -213,6 +211,7 @@ export default class signup extends Component {
                     Phone Seller
                   </Label>
                   <Input
+                    keyboardType={'phone-pad'}
                     style={s.inputStyle}
                     onChangeText={(e) =>
                       this.setState({
@@ -229,6 +228,7 @@ export default class signup extends Component {
                   Password
                 </Label>
                 <Input
+                  secureTextEntry={true}
                   style={s.inputStyle}
                   onChangeText={(e) =>
                     this.setState({
@@ -238,6 +238,7 @@ export default class signup extends Component {
                   }
                 />
               </Item>
+
               <View style={s.formAction}>
                 <TouchableOpacity
                   onPress={() => {

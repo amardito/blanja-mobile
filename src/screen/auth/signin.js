@@ -132,7 +132,7 @@ class signin extends Component {
                     color: this.state.level === 1 ? '#fff' : '#DB3022',
                     fontSize: 15,
                   }}>
-                  Consumer
+                  Costumer
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
@@ -175,6 +175,7 @@ class signin extends Component {
                   Email
                 </Label>
                 <Input
+                  keyboardType={'email-address'}
                   style={s.inputStyle}
                   onChangeText={(e) =>
                     this.setState({
@@ -191,6 +192,7 @@ class signin extends Component {
                   Password
                 </Label>
                 <Input
+                  secureTextEntry={true}
                   style={s.inputStyle}
                   onChangeText={(e) =>
                     this.setState({

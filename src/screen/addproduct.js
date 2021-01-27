@@ -206,7 +206,7 @@ class AddProduct extends React.Component {
         <Content style={{paddingHorizontal: 8}}>
           <ScrollView>
             <View style={{alignItems: 'center', marginTop: 20}}>
-              <Form style={{width: '95%'}}>
+              <Form style={{width: '95%', alignItems: 'center'}}>
                 <Item floatingLabel style={styles.inputBox}>
                   <Label style={styles.labelStyle} floatBack={3}>
                     Product Name
@@ -248,6 +248,7 @@ class AddProduct extends React.Component {
 
                 <View
                   style={{
+                    width: '100%',
                     flexDirection: 'row',
                     justifyContent: 'space-between',
                     marginTop: 5,
@@ -375,15 +376,15 @@ class AddProduct extends React.Component {
                 <Textarea
                   style={{
                     ...styles.inputBox,
+                    width: '100%',
                     elevation: 0,
                     borderColor: 'lightgray',
                     borderWidth: 1,
                     borderBottomWidth: 2,
                     fontSize: 16,
                     paddingLeft: 15,
-                    height: 90,
+                    height: 150,
                   }}
-                  textAlignVertical={'center'}
                   rowSpan={5}
                   placeholder="Description"
                   name="description"
@@ -393,29 +394,46 @@ class AddProduct extends React.Component {
                   }}
                 />
 
-                <View style={{flexDirection: 'row'}}>
-                  <ScrollView horizontal={true}>
-                    {product_img &&
-                      product_img.map((item) => {
-                        return (
-                          <Image
-                            key={product_img.indexOf(item)}
-                            source={{
-                              uri: product_img.length !== 0 ? item.path : '',
-                            }}
-                            style={styles.imageStyle}
-                          />
-                        );
-                      })}
-                  </ScrollView>
-                </View>
+                <Text style={{fontSize: 20, color: 'dimgray'}}>
+                  Product Image
+                </Text>
 
-                <View style={{flexDirection: 'row'}}>
-                  <Image
-                    source={{uri: this.state.taken_pic.path}}
-                    style={styles.imageStyle}
-                  />
-                </View>
+                {product_img[0] !== undefined ||
+                this.state.taken_pic.path !== undefined ? (
+                  <>
+                    <View style={{flexDirection: 'row', marginTop: 10}}>
+                      <ScrollView horizontal={true}>
+                        {product_img &&
+                          product_img.map((item) => {
+                            return (
+                              <Image
+                                key={product_img.indexOf(item)}
+                                source={{
+                                  uri:
+                                    product_img.length !== 0 ? item.path : '',
+                                }}
+                                style={styles.imageStyle}
+                              />
+                            );
+                          })}
+                      </ScrollView>
+                    </View>
+                    {this.state.taken_pic.path !== undefined && (
+                      <View style={{flexDirection: 'row', marginVertical: 10}}>
+                        <Image
+                          source={{uri: this.state.taken_pic.path}}
+                          style={styles.imageStyle}
+                        />
+                      </View>
+                    )}
+                  </>
+                ) : (
+                  <View style={{marginVertical: 20}}>
+                    <Text style={{fontSize: 20, alignSelf: 'center'}}>
+                      Add some image
+                    </Text>
+                  </View>
+                )}
 
                 <TouchableOpacity
                   activeOpacity={0.5}
@@ -470,7 +488,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 3,
-    marginBottom: 10,
+    marginBottom: 20,
+    elevation: 5,
   },
   btnText: {
     textAlign: 'center',

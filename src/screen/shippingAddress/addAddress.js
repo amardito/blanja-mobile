@@ -170,6 +170,7 @@ const addAddress = (props) => {
                 {'Zip Code (Postal code)'}
               </Label>
               <Input
+                keyboardType={'number-pad'}
                 style={s.inputStyle}
                 onChangeText={(e) => setpostCode(e)}
               />
@@ -179,7 +180,11 @@ const addAddress = (props) => {
               <Label style={s.labelStyle} floatBack={3}>
                 Recipient's telephone number
               </Label>
-              <Input style={s.inputStyle} onChangeText={(e) => setphone(e)} />
+              <Input
+                keyboardType={'phone-pad'}
+                style={s.inputStyle}
+                onChangeText={(e) => setphone(e)}
+              />
             </Item>
 
             <View style={s.formAction}>
