@@ -11,8 +11,10 @@ import alasql from 'alasql';
 
 import CardOrder from '../../components/card/cardOrder';
 
+import {BASE_URL} from '@env';
+
 const api = axios.create({
-  baseURL: 'http://192.168.1.15:1010/api/v1/',
+  baseURL: BASE_URL,
 });
 
 const orderdetail = (props) => {

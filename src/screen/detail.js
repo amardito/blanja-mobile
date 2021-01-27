@@ -31,8 +31,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {getMyBagAction} from '../global/ActionCreators/bag';
 import axios from 'axios';
 
+import {BASE_URL} from '@env';
+
 const api = axios.create({
-  baseURL: 'http://192.168.1.15:1010/api/v1/',
+  baseURL: BASE_URL,
 });
 
 import s from '../styles/detailStyle';

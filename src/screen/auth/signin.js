@@ -9,8 +9,10 @@ import {authLoginAction} from '../../global/ActionCreators/auth';
 
 import s from '../../styles/authStyle';
 
+import {BASE_URL} from '@env';
+
 const api = axios.create({
-  baseURL: 'http://192.168.1.15:1010/api/v1/',
+  baseURL: BASE_URL,
 });
 
 class signin extends Component {

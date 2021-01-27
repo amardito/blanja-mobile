@@ -28,8 +28,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import s from '../styles/profileStyle';
 
+import {BASE_URL} from '@env';
+
 const api = axios.create({
-  baseURL: 'http://192.168.1.15:1010/api/v1/',
+  baseURL: BASE_URL,
 });
 
 class profile extends Component {

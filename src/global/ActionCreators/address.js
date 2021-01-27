@@ -1,8 +1,10 @@
 import axios from 'axios';
 import {getMyAddress} from '../actionType';
 
+import {BASE_URL} from '@env';
+
 const api = axios.create({
-  baseURL: 'http://192.168.1.15:1010/api/v1/',
+  baseURL: BASE_URL,
 });
 
 export const getMyAddressAction = (data) => {

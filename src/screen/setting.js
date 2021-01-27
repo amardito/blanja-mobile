@@ -30,8 +30,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import ActionSheet from 'react-native-actions-sheet';
 import axios from 'axios';
 
+import {BASE_URL} from '@env';
+
 const api = axios.create({
-  baseURL: 'http://192.168.1.15:1010/api/v1/',
+  baseURL: BASE_URL,
 });
 
 const SettingProfile = ({route, navigation}) => {

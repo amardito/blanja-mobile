@@ -14,8 +14,10 @@ import {clearCheckoutAction} from '../global/ActionCreators/checkout';
 
 import s from '../styles/checkoutStyle';
 
+import {BASE_URL} from '@env';
+
 const api = axios.create({
-  baseURL: 'http://192.168.1.15:1010/api/v1/',
+  baseURL: BASE_URL,
 });
 
 export class Checkout extends Component {
