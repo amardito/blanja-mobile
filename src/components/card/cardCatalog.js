@@ -67,7 +67,7 @@ const CardCatalog = ({
 
 export default connect()(CardCatalog);
 
-const windowWidth = Dimensions.get('window').width;
+// const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
   container: {
