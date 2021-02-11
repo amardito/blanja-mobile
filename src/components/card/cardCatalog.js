@@ -17,7 +17,7 @@ const CardCatalog = ({
   dispatch,
 }) => {
   //console.log(image[0]);
-  const imgs = {uri: `http://192.168.1.15:1010/${image}`};
+  const imgs = {uri: `http://192.168.1.3:1010/${image}`};
   return (
     <TouchableOpacity
       style={styles.container}

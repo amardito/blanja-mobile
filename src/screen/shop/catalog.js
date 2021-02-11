@@ -37,7 +37,7 @@ const Catalog = ({navigation, route}) => {
     if (title === 'View All Items') {
       axios
         .get(
-          `http://192.168.1.15:1010/api/v1/search?name=&sortby=${sortby}&sort=${sort}`,
+          `http://192.168.1.3:1010/api/v1/search?name=&sortby=${sortby}&sort=${sort}`,
         )
         .then(({data}) => {
           setViewall(data.data.values);
@@ -48,7 +48,7 @@ const Catalog = ({navigation, route}) => {
     } else if (title === 'New' || title === 'Popular') {
       axios
         .get(
-          `http://192.168.1.15:1010/api/v1/search?name=&sortby=${sortby}&sort=${sort}`,
+          `http://192.168.1.3:1010/api/v1/search?name=&sortby=${sortby}&sort=${sort}`,
         )
         .then(({data}) => {
           setViewall(data.data.values);
@@ -59,7 +59,7 @@ const Catalog = ({navigation, route}) => {
     } else {
       axios
         .get(
-          `http://192.168.1.15:1010/api/v1/search?name=${search}&category=${category}&color=${color}&size=${size}&sortby=${sortby}&sort=${sort}`,
+          `http://192.168.1.3:1010/api/v1/search?name=${search}&category=${category}&color=${color}&size=${size}&sortby=${sortby}&sort=${sort}`,
         )
         .then(({data}) => {
           setViewall(data.data.values);

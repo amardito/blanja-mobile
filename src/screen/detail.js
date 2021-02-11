@@ -217,7 +217,7 @@ class detail extends Component {
                       <View style={s.imageItems} key={index}>
                         <Image
                           source={{
-                            uri: `http://192.168.1.15:1010${value}`,
+                            uri: `http://192.168.1.3:1010${value}`,
                           }}
                           style={s.image}
                         />
@@ -438,7 +438,7 @@ class detail extends Component {
                           {...this.props}
                           key={id_product}
                           id={id_product}
-                          image={`http://192.168.1.15:1010${
+                          image={`http://192.168.1.3:1010${
                             product_img.split(',')[0]
                           }`}
                           sold={product_sold}

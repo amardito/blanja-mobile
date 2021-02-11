@@ -126,7 +126,7 @@ class CardBag extends Component {
         )}
         <Image
           source={{
-            uri: 'http://192.168.1.15:1010/' + image,
+            uri: 'http://192.168.1.3:1010/' + image,
             width: 120,
             height: 120,
           }}
