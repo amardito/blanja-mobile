@@ -9,7 +9,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
-  Alert,
 } from 'react-native';
 import {
   Header,
@@ -39,6 +38,125 @@ const api = axios.create({
 
 import s from '../styles/detailStyle';
 
+class Modal extends Component {
+  render() {
+    const {height, width} = Dimensions.get('window');
+    return (
+      <View
+        style={{
+          position: 'absolute',
+          zIndex: 1,
+          top: 0,
+          width: width,
+          height: height,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <TouchableOpacity
+          onPress={this.props.background}
+          style={{backgroundColor: '#00000090', width: '100%', height: '100%'}}
+        />
+
+        <View
+          style={{
+            backgroundColor: '#fff',
+            elevation: 5,
+            width: '70%',
+            position: 'absolute',
+            zIndex: 1,
+            borderRadius: 14,
+            alignItems: 'center',
+            paddingTop: 18,
+            overflow: 'hidden',
+          }}>
+          <Text style={{fontSize: 22, marginBottom: 10, fontWeight: '700'}}>
+            {this.props.title}
+          </Text>
+          <Text
+            style={{
+              paddingHorizontal: 30,
+              textAlign: 'center',
+              paddingBottom: 19,
+            }}>
+            {this.props.desc}
+          </Text>
+          <View
+            style={{
+              borderTopWidth: 2,
+              borderTopColor: '#e0e0e0',
+              backgroundColor: '#e0e0e0',
+              width: '100%',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <TouchableOpacity
+              onPress={this.props.button1.onpress}
+              style={{
+                backgroundColor: '#fff',
+                width: this.props.button3
+                  ? '32.8%'
+                  : this.props.button2
+                  ? '49.5%'
+                  : '100%',
+                alignItems: 'center',
+              }}>
+              <Text
+                style={{
+                  color: '#D03022',
+                  paddingHorizontal: 15,
+                  paddingVertical: 10,
+                  fontSize: 15,
+                }}>
+                {this.props.button1.text}
+              </Text>
+            </TouchableOpacity>
+
+            {this.props.button2 && (
+              <TouchableOpacity
+                onPress={this.props.button2.onpress}
+                style={{
+                  backgroundColor: '#fff',
+                  width: this.props.button3 ? '32.8%' : '49.5%',
+                  alignItems: 'center',
+                }}>
+                <Text
+                  style={{
+                    color: '#D03022',
+                    paddingHorizontal: 15,
+                    paddingVertical: 10,
+                    fontSize: 15,
+                  }}>
+                  {this.props.button2.text}
+                </Text>
+              </TouchableOpacity>
+            )}
+
+            {this.props.button3 && (
+              <TouchableOpacity
+                onPress={this.props.button3.onpress}
+                style={{
+                  backgroundColor: '#fff',
+                  width: '32.8%',
+                  alignItems: 'center',
+                }}>
+                <Text
+                  style={{
+                    color: '#D03022',
+                    paddingHorizontal: 15,
+                    paddingVertical: 10,
+                    fontSize: 15,
+                  }}>
+                  {this.props.button3.text}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+      </View>
+    );
+  }
+}
+
 class detail extends Component {
   constructor(props) {
     super(props);
@@ -47,6 +165,13 @@ class detail extends Component {
       color: null,
       like: false,
       refData: [],
+      isModal: false,
+      titleModal: '',
+      descModal: '',
+      actBgModal: () => {},
+      act1Modal: false,
+      act2Modal: false,
+      act3Modal: false,
     };
   }
 
@@ -102,28 +227,33 @@ class detail extends Component {
 
     await AsyncStorage.setItem('belanjaUser', JSON.stringify(newData));
     this.props.dispatch(getMyBagAction());
-    Alert.alert(
-      'Succes add items',
-      'Check your bag for items',
-      [
-        {
-          text: 'Back Home',
-          onPress: () => {
-            this.props.navigation.navigate('mainscreen');
-          },
+    const {navigation} = this.props;
+    this.setState({
+      isModal: true,
+      titleModal: 'Add Items Success',
+      descModal: 'Do you want to see mybag right now?',
+      act1Modal: {
+        text: 'Back Home',
+        onpress: () => {
+          this.setState({isModal: false});
+          navigation.navigate('mainscreen');
         },
-        {
-          text: 'Check Later',
+      },
+      act2Modal: {
+        text: 'Check Later',
+        onpress: () => this.setState({isModal: false}),
+      },
+      act3Modal: {
+        text: 'Check Now',
+        onpress: () => {
+          this.setState({isModal: false});
+          navigation.navigate('mybag');
         },
-        {
-          text: 'Check Now',
-          onPress: () => {
-            this.props.navigation.navigate('mybag');
-          },
-        },
-      ],
-      {cancelable: true},
-    );
+      },
+      actBgModal: () => {
+        this.setState({isModal: false});
+      },
+    });
   };
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -173,8 +303,29 @@ class detail extends Component {
         const payload = {label: size, value: size};
         return sizeItems.push(payload);
       });
+
+    const {
+      isModal,
+      titleModal,
+      descModal,
+      act1Modal,
+      act2Modal,
+      act3Modal,
+      actBgModal,
+    } = this.state;
+
     return (
       <>
+        {isModal && (
+          <Modal
+            title={titleModal}
+            desc={descModal}
+            background={actBgModal}
+            button1={act1Modal}
+            button2={act2Modal}
+            button3={act3Modal}
+          />
+        )}
         <Header style={s.header}>
           <StatusBar
             translucent={true}
@@ -217,7 +368,7 @@ class detail extends Component {
                       <View style={s.imageItems} key={index}>
                         <Image
                           source={{
-                            uri: `http://192.168.1.3:1010${value}`,
+                            uri: `http://192.168.1.2:1010${value}`,
                           }}
                           style={s.image}
                         />
@@ -438,7 +589,7 @@ class detail extends Component {
                           {...this.props}
                           key={id_product}
                           id={id_product}
-                          image={`http://192.168.1.3:1010${
+                          image={`http://192.168.1.2:1010${
                             product_img.split(',')[0]
                           }`}
                           sold={product_sold}

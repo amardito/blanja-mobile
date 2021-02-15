@@ -1,6 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {Alert, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  ToastAndroid,
+} from 'react-native';
 import {Container, Form, Item, Input, Label, Button} from 'native-base';
 import axios from 'axios';
 
@@ -63,7 +69,7 @@ export default class signup extends Component {
           },
         })
         .then(async () => {
-          Alert.alert('Success register');
+          ToastAndroid.show('Successfully Register');
 
           this.props.navigation.navigate('signin');
         })

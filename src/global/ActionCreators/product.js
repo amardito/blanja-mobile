@@ -12,6 +12,7 @@ const api = axios.create({
 });
 
 export const getNewProductAction = () => {
+  console.log('URL ', BASE_URL);
   return {
     type: getNewProduct,
     payload: api.get('products?sortby=latest&sort=DESC'),

@@ -8,7 +8,7 @@ import {
   StatusBar,
   TouchableOpacity,
   ScrollView,
-  Alert,
+  ToastAndroid,
 } from 'react-native';
 import {
   Container,
@@ -68,30 +68,11 @@ const addAddress = (props) => {
       })
       .then(async () => {
         props.dispatch(getMyAddressAction({email: JSON.parse(token).email}));
-        Alert.alert(
-          'Success Save New Address',
-          null,
-          [
-            {
-              text: 'OK',
-              onPress: () => props.navigation.goBack(),
-            },
-          ],
-          {cancelable: false},
-        );
+        ToastAndroid.show('Successfully Save new Address');
+        props.navigation.goBack();
       })
-      .catch((e) => {
-        console.log(e);
-        Alert.alert(
-          'Failed Edit',
-          null,
-          [
-            {
-              text: 'Ok',
-            },
-          ],
-          {cancelable: false},
-        );
+      .catch(() => {
+        ToastAndroid.show('Failed Save new Address');
       });
   };
 
@@ -198,47 +179,21 @@ const addAddress = (props) => {
                   block
                   onPress={() => {
                     addName === ''
-                      ? Alert.alert(
-                          'Failed to save',
-                          'Shipping Name not filled yet',
-                          ['Ok'],
-                        )
+                      ? ToastAndroid.show('Shipping Name not filled yet')
                       : recName === ''
-                      ? Alert.alert(
-                          'Failed to save',
-                          'Recipient’s name not filled yet',
-                          ['Ok'],
-                        )
+                      ? ToastAndroid.show('Recipient’s name not filled yet')
                       : street === ''
-                      ? Alert.alert(
-                          'Failed to save',
-                          'Address Street not filled yet',
-                          ['Ok'],
-                        )
+                      ? ToastAndroid.show('Address Street not filled yet')
                       : city === ''
-                      ? Alert.alert(
-                          'Failed to save',
-                          'City or Subdistrict not filled yet',
-                          ['Ok'],
-                        )
+                      ? ToastAndroid.show('City or Subdistrict not filled yet')
                       : region === ''
-                      ? Alert.alert(
-                          'Failed to save',
+                      ? ToastAndroid.show(
                           'Region or Province, State not filled yet',
-                          ['Ok'],
                         )
                       : postCode === ''
-                      ? Alert.alert(
-                          'Failed to save',
-                          'Post Code not filled yet',
-                          ['Ok'],
-                        )
+                      ? ToastAndroid.show('Post Code not filled yet')
                       : phone === ''
-                      ? Alert.alert(
-                          'Failed to save',
-                          'Recipient’s Phone not filled yet',
-                          ['Ok'],
-                        )
+                      ? ToastAndroid.show('Recipient’s Phone not filled yet')
                       : newAddress();
                   }}>
                   <Text style={s.whiteText}>SAVE ADDRESS</Text>

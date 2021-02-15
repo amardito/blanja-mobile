@@ -1,13 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {
-  Alert,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
 
@@ -46,15 +39,15 @@ class CardBag extends Component {
         this.props.dispatch(getNewProductAction());
         this.props.dispatch(getPopularProductAction());
       })
-      .catch((e) => {
-        console.log(e);
+      .catch(() => {
+        // err
       });
   };
   toPrice = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   };
   render() {
-    const {id, name, price, qty, image} = this.props;
+    const {id, name, price, qty, image, isModal, confModal} = this.props;
     return (
       <View style={styles.container}>
         {this.state.pop && (
@@ -93,23 +86,29 @@ class CardBag extends Component {
               <Text style={{fontSize: 15}}>Edit</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => {
-                Alert.alert(
-                  'Warning !!',
-                  'are you sure want delete this product?',
-                  [
-                    {
-                      text: 'yes',
-                      onPress: () => {
-                        this.deleteProduct(id);
-                      },
+              onPress={async () => {
+                await confModal({
+                  titleModal: 'Delete Product',
+                  descModal: 'Are you sure want delete this product?',
+                  actBgModal: () => {
+                    isModal({isModal: false});
+                  },
+                  act1Modal: {
+                    text: 'yes',
+                    onpress: () => {
+                      this.deleteProduct(id);
+                      isModal({isModal: false});
                     },
-                    {
-                      text: 'no',
+                  },
+                  act2Modal: {
+                    text: 'no',
+                    onpress: () => {
+                      isModal({isModal: false});
                     },
-                  ],
-                  {cancelable: true},
-                );
+                  },
+                  act3Modal: false,
+                });
+                isModal({isModal: true});
               }}
               style={{
                 elevation: 10,
@@ -126,7 +125,7 @@ class CardBag extends Component {
         )}
         <Image
           source={{
-            uri: 'http://192.168.1.3:1010/' + image,
+            uri: 'http://192.168.1.2:1010/' + image,
             width: 120,
             height: 120,
           }}

@@ -8,7 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   StatusBar,
-  Alert,
+  ToastAndroid,
 } from 'react-native';
 import {
   Container,
@@ -123,7 +123,7 @@ class AddProduct extends React.Component {
     }
 
     axios
-      .post('http://192.168.1.3:1010/api/v1' + '/product/create', data, config)
+      .post('http://192.168.1.2:1010/api/v1' + '/product/create', data, config)
       .then(() => {
         showNotification('Notification', 'Add Product Success', channel);
         this.props.dispatch(getNewProductAction());
@@ -132,7 +132,7 @@ class AddProduct extends React.Component {
       })
       .catch((err) => {
         console.log(err);
-        Alert.alert('Failed add new product');
+        ToastAndroid.show('Failed add new product');
       });
   };
 

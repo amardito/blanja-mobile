@@ -7,7 +7,7 @@ import {
   StatusBar,
   TouchableOpacity,
   ScrollView,
-  Alert,
+  ToastAndroid,
 } from 'react-native';
 import {
   Container,
@@ -77,31 +77,10 @@ const changeAddress = (props) => {
       .then(async () => {
         const token = await AsyncStorage.getItem('token');
         props.dispatch(getMyAddressAction({email: JSON.parse(token).email}));
-        Alert.alert(
-          'Success Edit',
-          null,
-          [
-            {
-              text: 'Back',
-              onPress: () => props.navigation.goBack(),
-            },
-            {text: 'Edit again'},
-          ],
-          {cancelable: false},
-        );
+        ToastAndroid.show('Successfully Update');
       })
-      .catch((e) => {
-        console.log(e);
-        Alert.alert(
-          'Failed Edit',
-          null,
-          [
-            {
-              text: 'Ok',
-            },
-          ],
-          {cancelable: false},
-        );
+      .catch(() => {
+        ToastAndroid.show('Failed to update');
       });
   };
 

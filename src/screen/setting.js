@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import React from 'react';
+import React, {Component} from 'react';
 import {createRef, useState, useEffect} from 'react';
 import {
   Dimensions,
@@ -10,9 +10,10 @@ import {
   StatusBar,
   TouchableOpacity,
   ScrollView,
-  Alert,
+
   // KeyboardAvoidingView,
   TouchableWithoutFeedback,
+  ToastAndroid,
 } from 'react-native';
 import {
   Body,
@@ -36,6 +37,125 @@ const api = axios.create({
   baseURL: BASE_URL,
 });
 
+class Modal extends Component {
+  render() {
+    const {height, width} = Dimensions.get('window');
+    return (
+      <View
+        style={{
+          position: 'absolute',
+          zIndex: 1,
+          top: 0,
+          width: width,
+          height: height,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <TouchableOpacity
+          onPress={this.props.background}
+          style={{backgroundColor: '#00000090', width: '100%', height: '100%'}}
+        />
+
+        <View
+          style={{
+            backgroundColor: '#fff',
+            elevation: 5,
+            width: '70%',
+            position: 'absolute',
+            zIndex: 1,
+            borderRadius: 14,
+            alignItems: 'center',
+            paddingTop: 18,
+            overflow: 'hidden',
+          }}>
+          <Text style={{fontSize: 22, marginBottom: 10, fontWeight: '700'}}>
+            {this.props.title}
+          </Text>
+          <Text
+            style={{
+              paddingHorizontal: 30,
+              textAlign: 'center',
+              paddingBottom: 19,
+            }}>
+            {this.props.desc}
+          </Text>
+          <View
+            style={{
+              borderTopWidth: 2,
+              borderTopColor: '#e0e0e0',
+              backgroundColor: '#e0e0e0',
+              width: '100%',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}>
+            <TouchableOpacity
+              onPress={this.props.button1.onpress}
+              style={{
+                backgroundColor: '#fff',
+                width: this.props.button3
+                  ? '32.8%'
+                  : this.props.button2
+                  ? '49.5%'
+                  : '100%',
+                alignItems: 'center',
+              }}>
+              <Text
+                style={{
+                  color: '#D03022',
+                  paddingHorizontal: 15,
+                  paddingVertical: 10,
+                  fontSize: 15,
+                }}>
+                {this.props.button1.text}
+              </Text>
+            </TouchableOpacity>
+
+            {this.props.button2 && (
+              <TouchableOpacity
+                onPress={this.props.button2.onpress}
+                style={{
+                  backgroundColor: '#fff',
+                  width: this.props.button3 ? '32.8%' : '49.5%',
+                  alignItems: 'center',
+                }}>
+                <Text
+                  style={{
+                    color: '#D03022',
+                    paddingHorizontal: 15,
+                    paddingVertical: 10,
+                    fontSize: 15,
+                  }}>
+                  {this.props.button2.text}
+                </Text>
+              </TouchableOpacity>
+            )}
+
+            {this.props.button3 && (
+              <TouchableOpacity
+                onPress={this.props.button3.onpress}
+                style={{
+                  backgroundColor: '#fff',
+                  width: '32.8%',
+                  alignItems: 'center',
+                }}>
+                <Text
+                  style={{
+                    color: '#D03022',
+                    paddingHorizontal: 15,
+                    paddingVertical: 10,
+                    fontSize: 15,
+                  }}>
+                  {this.props.button3.text}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+      </View>
+    );
+  }
+}
+
 const SettingProfile = ({route, navigation}) => {
   const {email} = route.params;
   const [editUsername, seteditUsername] = useState(false);
@@ -50,8 +170,15 @@ const SettingProfile = ({route, navigation}) => {
   const [Phone, setPhone] = useState('');
   const actionSheetRef = createRef();
   const actionUpgrade = createRef();
-
-  console.log(level);
+  const [isModal, setisModal] = useState(false);
+  const [confModal, setconfModal] = useState({
+    titleModal: '',
+    descModal: '',
+    actBgModal: () => {},
+    act1Modal: false,
+    act2Modal: false,
+    act3Modal: false,
+  });
 
   const getUserInfo = () => {
     const payload = {
@@ -67,7 +194,7 @@ const SettingProfile = ({route, navigation}) => {
         setlevel(data.data[0].level_id);
       })
       .catch(() => {
-        Alert.alert('Failed Get User Info');
+        ToastAndroid.show('Failed Get User Info');
       });
   };
 
@@ -89,10 +216,7 @@ const SettingProfile = ({route, navigation}) => {
           headers: {'Content-Type': 'application/json'},
         })
         .then(() => {
-          Alert.alert(
-            'Successfully Upgrade Account',
-            'Now you can access seller level',
-          );
+          ToastAndroid.show('Successfully Upgrade to Seller');
           setmsgErr('');
           getUserInfo();
         })
@@ -101,7 +225,6 @@ const SettingProfile = ({route, navigation}) => {
             setmsgErr('Store name already taken');
             setStore('');
           }
-          // Alert.alert('Failed Change Password');
         });
     }
   };
@@ -119,11 +242,11 @@ const SettingProfile = ({route, navigation}) => {
           headers: {'Content-Type': 'application/json'},
         })
         .then(() => {
-          Alert.alert('Successfully Change Password');
+          ToastAndroid.show('Successfully Change Password');
           setmsgErr('');
         })
         .catch(() => {
-          Alert.alert('Failed Change Password');
+          ToastAndroid.show('Failed Change Password');
         });
     } else {
       setmsgErr('Confirm Password is not match');
@@ -145,13 +268,23 @@ const SettingProfile = ({route, navigation}) => {
         seteditUsername(false);
       })
       .catch(() => {
-        Alert.alert('Failed Change Username');
+        ToastAndroid.show('Failed Change Username');
       });
   };
   const windowHeight = Dimensions.get('window').height;
 
   return (
     <>
+      {isModal && (
+        <Modal
+          title={confModal.titleModal}
+          desc={confModal.descModal}
+          background={confModal.actBgModal}
+          button1={confModal.act1Modal}
+          button2={confModal.act2Modal}
+          button3={confModal.act3Modal}
+        />
+      )}
       <Header style={styles.header}>
         <StatusBar
           translucent={true}
@@ -207,15 +340,29 @@ const SettingProfile = ({route, navigation}) => {
                 onChangeText={(e) => setUsername(e)}
                 onEndEditing={() => {
                   if (Username !== '') {
-                    Alert.alert(
-                      'Information',
-                      'Are you sure want to change your current username?',
-                      [
-                        {text: 'yes', onPress: () => changeUsername()},
-                        {text: 'no'},
-                      ],
-                      {cancelable: true},
-                    );
+                    setisModal(true);
+                    setconfModal({
+                      titleModal: 'Changes Confirmation',
+                      descModal:
+                        'Are you sure want to change your current username?',
+                      actBgModal: () => {},
+                      act1Modal: {
+                        text: 'no',
+                        onpress: () => {
+                          setisModal(false);
+                          seteditUsername(false);
+                        },
+                      },
+                      act2Modal: {
+                        text: 'yes',
+                        onpress: () => {
+                          setisModal(false);
+                          changeUsername();
+                          seteditUsername(false);
+                        },
+                      },
+                      act3Modal: false,
+                    });
                   }
                   seteditUsername(false);
                 }}

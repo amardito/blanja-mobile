@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
-import {View, Text, TouchableOpacity, Alert} from 'react-native';
+import {View, Text, TouchableOpacity} from 'react-native';
 
 import s from '../../styles/cardAddressStyle';
 
@@ -16,7 +16,18 @@ const api = axios.create({
 });
 
 const cardAddress = (props) => {
-  const {name, street, city, region, index, address, id, deleteAct} = props;
+  const {
+    name,
+    street,
+    city,
+    region,
+    index,
+    address,
+    id,
+    deleteAct,
+    isModal,
+    confModal,
+  } = props;
   const deleteAddress = () => {
     api
       .delete(`profile/address/${id}`)
@@ -27,23 +38,9 @@ const cardAddress = (props) => {
             email: JSON.parse(token).email,
           }),
         );
-        Alert.alert('Success Delete', null, [
-          {
-            text: 'Ok',
-          },
-        ]);
       })
       .catch(() => {
-        Alert.alert(
-          'Failed Delete',
-          null,
-          [
-            {
-              text: 'Ok',
-            },
-          ],
-          {cancelable: false},
-        );
+        // err
       });
   };
   return (
@@ -70,22 +67,29 @@ const cardAddress = (props) => {
           </TouchableOpacity>
           {deleteAct && (
             <TouchableOpacity
-              onPress={() => {
-                Alert.alert(
-                  'Warning !!',
-                  'Are you sure want delete this address?',
-                  [
-                    {
-                      text: 'Yes',
-                      onPress: () => {
-                        deleteAddress();
-                      },
+              onPress={async () => {
+                await confModal({
+                  titleModal: 'Delete Address',
+                  descModal: 'Are you sure want delete this address?',
+                  actBgModal: () => {
+                    isModal(false);
+                  },
+                  act1Modal: {
+                    text: 'yes',
+                    onpress: () => {
+                      deleteAddress();
+                      isModal(false);
                     },
-                    {
-                      text: 'No',
+                  },
+                  act2Modal: {
+                    text: 'no',
+                    onpress: () => {
+                      isModal(false);
                     },
-                  ],
-                );
+                  },
+                  act3Modal: false,
+                });
+                isModal(true);
               }}>
               <Text
                 style={{

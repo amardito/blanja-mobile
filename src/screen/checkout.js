@@ -1,6 +1,12 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import {Text, View, StatusBar, TouchableOpacity, Alert} from 'react-native';
+import {
+  Text,
+  View,
+  StatusBar,
+  TouchableOpacity,
+  ToastAndroid,
+} from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Body, Button, Header, Left, Title} from 'native-base';
 import CardAddress from '../components/card/cardAddress';
@@ -67,39 +73,22 @@ export class Checkout extends Component {
           'Content-Type': 'application/json',
         },
       })
-      .then(() => {
-        Alert.alert(
-          'Success Submit Order',
-          null,
-          [
-            {
-              text: 'OK',
-              onPress: async () => {
-                await AsyncStorage.setItem(
-                  'belanjaUser',
-                  JSON.stringify(newData),
-                );
-                await this.props.dispatch(getMyBagAction());
-                await this.props.dispatch(clearCheckoutAction());
-                this.props.navigation.navigate('mybag');
-              },
-            },
-          ],
-          {cancelable: false},
-        );
+      .then(async () => {
+        await AsyncStorage.setItem('belanjaUser', JSON.stringify(newData));
+        ToastAndroid.show('Order Success');
+        this.props.dispatch(getMyBagAction());
+        this.props.dispatch(clearCheckoutAction());
+        this.props.navigation.reset({
+          index: 0,
+          routes: [{name: 'mainscreen'}],
+        });
       })
-      .catch((e) => {
-        console.log(e);
-        Alert.alert(
-          'Failed to Submit',
-          'Internal Server Error',
-          [
-            {
-              text: 'Ok',
-            },
-          ],
-          {cancelable: false},
-        );
+      .catch(() => {
+        ToastAndroid.show('Order Failed, Please try again');
+        this.props.navigation.reset({
+          index: 0,
+          routes: [{name: 'mybag'}],
+        });
       });
   };
   render() {
@@ -253,17 +242,9 @@ export class Checkout extends Component {
           <TouchableOpacity
             onPress={() => {
               id_address === undefined
-                ? Alert.alert(
-                    'Failed to Submit Order',
-                    'Shipping Address not filled yet',
-                    ['Ok'],
-                  )
+                ? ToastAndroid.show('Shipping Address not define yet')
                 : payment === null
-                ? Alert.alert(
-                    'Failed to Submit Order',
-                    'Payment not filled yet',
-                    ['Ok'],
-                  )
+                ? ToastAndroid.show('Payment not filled yet')
                 : this.submitOrder();
               // navigation.navigate('Success');
             }}>
