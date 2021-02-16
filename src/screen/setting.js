@@ -194,7 +194,7 @@ const SettingProfile = ({route, navigation}) => {
         setlevel(data.data[0].level_id);
       })
       .catch(() => {
-        ToastAndroid.show('Failed Get User Info');
+        ToastAndroid.show('Failed Get User Info', 0.0001);
       });
   };
 
@@ -216,7 +216,7 @@ const SettingProfile = ({route, navigation}) => {
           headers: {'Content-Type': 'application/json'},
         })
         .then(() => {
-          ToastAndroid.show('Successfully Upgrade to Seller');
+          ToastAndroid.show('Successfully Upgrade to Seller', 0.0001);
           setmsgErr('');
           getUserInfo();
         })
@@ -242,11 +242,11 @@ const SettingProfile = ({route, navigation}) => {
           headers: {'Content-Type': 'application/json'},
         })
         .then(() => {
-          ToastAndroid.show('Successfully Change Password');
+          ToastAndroid.show('Successfully Change Password', 0.0001);
           setmsgErr('');
         })
         .catch(() => {
-          ToastAndroid.show('Failed Change Password');
+          ToastAndroid.show('Failed Change Password', 0.0001);
         });
     } else {
       setmsgErr('Confirm Password is not match');
@@ -268,7 +268,7 @@ const SettingProfile = ({route, navigation}) => {
         seteditUsername(false);
       })
       .catch(() => {
-        ToastAndroid.show('Failed Change Username');
+        ToastAndroid.show('Failed Change Username', 0.0001);
       });
   };
   const windowHeight = Dimensions.get('window').height;

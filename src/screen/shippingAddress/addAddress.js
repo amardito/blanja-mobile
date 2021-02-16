@@ -68,11 +68,11 @@ const addAddress = (props) => {
       })
       .then(async () => {
         props.dispatch(getMyAddressAction({email: JSON.parse(token).email}));
-        ToastAndroid.show('Successfully Save new Address');
+        ToastAndroid.show('Successfully Save new Address', 0.0001);
         props.navigation.goBack();
       })
       .catch(() => {
-        ToastAndroid.show('Failed Save new Address');
+        ToastAndroid.show('Failed Save new Address', 0.0001);
       });
   };
 
@@ -179,21 +179,37 @@ const addAddress = (props) => {
                   block
                   onPress={() => {
                     addName === ''
-                      ? ToastAndroid.show('Shipping Name not filled yet')
+                      ? ToastAndroid.show(
+                          'Shipping Name not filled yet',
+                          0.0001,
+                        )
                       : recName === ''
-                      ? ToastAndroid.show('Recipient’s name not filled yet')
+                      ? ToastAndroid.show(
+                          'Recipient’s name not filled yet',
+                          0.0001,
+                        )
                       : street === ''
-                      ? ToastAndroid.show('Address Street not filled yet')
+                      ? ToastAndroid.show(
+                          'Address Street not filled yet',
+                          0.0001,
+                        )
                       : city === ''
-                      ? ToastAndroid.show('City or Subdistrict not filled yet')
+                      ? ToastAndroid.show(
+                          'City or Subdistrict not filled yet',
+                          0.0001,
+                        )
                       : region === ''
                       ? ToastAndroid.show(
                           'Region or Province, State not filled yet',
+                          0.0001,
                         )
                       : postCode === ''
-                      ? ToastAndroid.show('Post Code not filled yet')
+                      ? ToastAndroid.show('Post Code not filled yet', 0.0001)
                       : phone === ''
-                      ? ToastAndroid.show('Recipient’s Phone not filled yet')
+                      ? ToastAndroid.show(
+                          'Recipient’s Phone not filled yet',
+                          0.0001,
+                        )
                       : newAddress();
                   }}>
                   <Text style={s.whiteText}>SAVE ADDRESS</Text>

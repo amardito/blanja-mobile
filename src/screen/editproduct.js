@@ -169,7 +169,7 @@ class EditProduct extends React.Component {
         this.props.navigation.navigate('profile');
       })
       .catch(() => {
-        ToastAndroid.show('Failed update product');
+        ToastAndroid.show('Failed update product', 0.0001);
       });
   };
 

@@ -132,7 +132,7 @@ class AddProduct extends React.Component {
       })
       .catch((err) => {
         console.log(err);
-        ToastAndroid.show('Failed add new product');
+        ToastAndroid.show('Failed add new product', 0.0001);
       });
   };
 

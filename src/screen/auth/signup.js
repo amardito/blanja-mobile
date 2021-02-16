@@ -69,7 +69,7 @@ export default class signup extends Component {
           },
         })
         .then(async () => {
-          ToastAndroid.show('Successfully Register');
+          ToastAndroid.show('Successfully Register', 0.0001);
 
           this.props.navigation.navigate('signin');
         })

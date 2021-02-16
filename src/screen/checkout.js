@@ -75,7 +75,7 @@ export class Checkout extends Component {
       })
       .then(async () => {
         await AsyncStorage.setItem('belanjaUser', JSON.stringify(newData));
-        ToastAndroid.show('Order Success');
+        ToastAndroid.show('Order Success', 0.0001);
         this.props.dispatch(getMyBagAction());
         this.props.dispatch(clearCheckoutAction());
         this.props.navigation.reset({
@@ -84,7 +84,7 @@ export class Checkout extends Component {
         });
       })
       .catch(() => {
-        ToastAndroid.show('Order Failed, Please try again');
+        ToastAndroid.show('Order Failed, Please try again', 0.0001);
         this.props.navigation.reset({
           index: 0,
           routes: [{name: 'mybag'}],
@@ -242,9 +242,9 @@ export class Checkout extends Component {
           <TouchableOpacity
             onPress={() => {
               id_address === undefined
-                ? ToastAndroid.show('Shipping Address not define yet')
+                ? ToastAndroid.show('Shipping Address not define yet', 0.0001)
                 : payment === null
-                ? ToastAndroid.show('Payment not filled yet')
+                ? ToastAndroid.show('Payment not filled yet', 0.0001)
                 : this.submitOrder();
               // navigation.navigate('Success');
             }}>

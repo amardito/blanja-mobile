@@ -77,10 +77,10 @@ const changeAddress = (props) => {
       .then(async () => {
         const token = await AsyncStorage.getItem('token');
         props.dispatch(getMyAddressAction({email: JSON.parse(token).email}));
-        ToastAndroid.show('Successfully Update');
+        ToastAndroid.show('Successfully Update', 0.0001);
       })
       .catch(() => {
-        ToastAndroid.show('Failed to update');
+        ToastAndroid.show('Failed to update', 0.0001);
       });
   };
 

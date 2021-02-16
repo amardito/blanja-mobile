@@ -9,6 +9,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  ToastAndroid,
 } from 'react-native';
 import {
   Header,
@@ -233,18 +234,18 @@ class detail extends Component {
       titleModal: 'Add Items Success',
       descModal: 'Do you want to see mybag right now?',
       act1Modal: {
-        text: 'Back Home',
+        text: 'Back',
         onpress: () => {
           this.setState({isModal: false});
           navigation.navigate('mainscreen');
         },
       },
       act2Modal: {
-        text: 'Check Later',
+        text: 'No',
         onpress: () => this.setState({isModal: false}),
       },
       act3Modal: {
-        text: 'Check Now',
+        text: 'Yes',
         onpress: () => {
           this.setState({isModal: false});
           navigation.navigate('mybag');
@@ -621,25 +622,49 @@ class detail extends Component {
                   backgroundColor: 'transparent',
                 }}>
                 <BoxShadow setting={shadowOpt}>
-                  <FooterTab style={{backgroundColor: 'white'}}>
-                    <Button>
-                      <TouchableOpacity
-                        onPress={() => {
-                          this.handleBag();
+                  <FooterTab
+                    style={{
+                      backgroundColor: 'white',
+                      paddingHorizontal: 15,
+                      alignItems: 'center',
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.handleBag();
+                      }}>
+                      <View
+                        style={{
+                          height: 48,
+                          width: 300,
+                          borderRadius: 25,
+                          backgroundColor: '#DB3022',
+                          justifyContent: 'center',
+                          alignItems: 'center',
                         }}>
-                        <View
-                          style={{
-                            height: 48,
-                            width: 343,
-                            borderRadius: 25,
-                            backgroundColor: '#DB3022',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}>
-                          <Text style={{color: 'white'}}>ADD TO CART</Text>
-                        </View>
-                      </TouchableOpacity>
-                    </Button>
+                        <Text style={{color: 'white'}}>ADD TO CART</Text>
+                      </View>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      onPress={() => {
+                        ToastAndroid.show('redirect to chat', 0.0001);
+                      }}>
+                      <View
+                        style={{
+                          height: 48,
+                          width: 48,
+                          borderRadius: 25,
+                          backgroundColor: '#DB3022',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                        }}>
+                        <MaterialCommunityIcons
+                          name="forum"
+                          color={'white'}
+                          size={24}
+                        />
+                      </View>
+                    </TouchableOpacity>
                   </FooterTab>
                 </BoxShadow>
               </Footer>
