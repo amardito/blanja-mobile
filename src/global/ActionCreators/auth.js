@@ -1,9 +1,10 @@
 import {authLoginType, authLogoutType} from '../actionType';
 
-export const authLoginAction = (payload) => {
+export const authLoginAction = (payloadLevel, payloadidUser) => {
   return {
     type: authLoginType,
-    level: payload,
+    level: payloadLevel,
+    idUser: payloadidUser,
   };
 };
 

@@ -17,8 +17,9 @@ import {Home, Profile, MyBag, Shop} from '../../screen';
 class main extends Component {
   loginAct = async () => {
     if ((await AsyncStorage.getItem('token')) !== null) {
-      const data = JSON.parse(await AsyncStorage.getItem('token')).login_as;
-      this.props.dispatch(authLoginAction(data));
+      const loginsAS = JSON.parse(await AsyncStorage.getItem('token')).login_as;
+      const idUser = JSON.parse(await AsyncStorage.getItem('token')).id;
+      this.props.dispatch(authLoginAction(loginsAS, idUser));
     }
     await SplashScreen.hide();
   };

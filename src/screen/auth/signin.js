@@ -63,7 +63,9 @@ class signin extends Component {
           },
         })
         .then(async ({data}) => {
-          this.props.dispatch(authLoginAction(data.data.login_as));
+          this.props.dispatch(
+            authLoginAction(data.data.login_as, data.data.id),
+          );
           await this._storeData(JSON.stringify(data.data));
 
           this.props.navigation.navigate('mainscreen');

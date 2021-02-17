@@ -11,6 +11,7 @@ const authReducer = (prevState = defaultState, action) => {
         ...prevState,
         isLogin: true,
         level: action.level,
+        idUser: action.idUser,
       };
 
     case authLogoutType:
@@ -18,6 +19,7 @@ const authReducer = (prevState = defaultState, action) => {
         ...prevState,
         isLogin: false,
         level: null,
+        idUser: null,
       };
 
     default:
