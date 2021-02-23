@@ -12,6 +12,8 @@ import AddProduct from './addproduct';
 import EditProduct from './editproduct';
 import Shop from './shop';
 import SettingProfile from './setting';
+import Chat from './chat';
+import ChatList from './chatlist';
 export {
   Home,
   Auth,
@@ -27,4 +29,6 @@ export {
   EditProduct,
   Shop,
   SettingProfile,
+  Chat,
+  ChatList,
 };

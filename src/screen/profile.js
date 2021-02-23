@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
   Dimensions,
+  RefreshControl,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
@@ -36,7 +37,7 @@ const api = axios.create({
 
 class Modal extends Component {
   render() {
-    const {height, width} = Dimensions.get('window');
+    const {height, width} = Dimensions.get('screen');
     return (
       <View
         style={{
@@ -153,6 +154,10 @@ class Modal extends Component {
   }
 }
 
+const wait = (timeout) => {
+  return new Promise((resolve) => setTimeout(resolve, timeout));
+};
+
 class profile extends Component {
   constructor(props) {
     super(props);
@@ -166,6 +171,7 @@ class profile extends Component {
       act1Modal: false,
       act2Modal: false,
       act3Modal: false,
+      refresh: false,
     };
     this._auth = async () => {
       console.log(`\n
@@ -227,6 +233,14 @@ class profile extends Component {
     }
   };
 
+  onRefresh = () => {
+    this.setState({refresh: true});
+    wait(700).then(async () => {
+      await this.getToken();
+      this.setState({refresh: false});
+    });
+  };
+
   logoutHandle = async () => {
     const {token} = this.state;
     await api
@@ -268,6 +282,7 @@ class profile extends Component {
       act2Modal,
       act3Modal,
       actBgModal,
+      refresh,
     } = this.state;
 
     return (
@@ -310,7 +325,13 @@ class profile extends Component {
             </Button>
           </Right>
         </Header>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={refresh}
+              onRefresh={() => this.onRefresh()}
+            />
+          }>
           <Text style={s.textHeader}>My Profile</Text>
 
           <Card transparent style={s.profile}>
@@ -423,6 +444,32 @@ class profile extends Component {
               </TouchableOpacity>
             )}
             <View style={s.line} />
+
+            {this.props.auth.level === 'seller' && (
+              <>
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate('chatlist');
+                  }}>
+                  <View style={s.accordian}>
+                    <View>
+                      <Text style={{fontSize: 16, fontWeight: 'bold'}}>
+                        Chat
+                      </Text>
+                      <Text style={{color: 'grey'}}>
+                        Chat your customer here
+                      </Text>
+                    </View>
+                    <MaterialCommunityIcons
+                      name="chevron-right"
+                      color={'#888'}
+                      size={35}
+                    />
+                  </View>
+                </TouchableOpacity>
+                <View style={s.line} />
+              </>
+            )}
 
             <TouchableOpacity
               onPress={() => {

@@ -19,9 +19,9 @@ class main extends Component {
     if ((await AsyncStorage.getItem('token')) !== null) {
       const loginsAS = JSON.parse(await AsyncStorage.getItem('token')).login_as;
       const idUser = JSON.parse(await AsyncStorage.getItem('token')).id;
-      this.props.dispatch(authLoginAction(loginsAS, idUser));
+      await this.props.dispatch(authLoginAction(loginsAS, idUser));
     }
-    await SplashScreen.hide();
+    SplashScreen.hide();
   };
 
   componentDidMount = async () => {

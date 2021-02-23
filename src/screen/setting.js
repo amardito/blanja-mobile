@@ -30,6 +30,7 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionSheet from 'react-native-actions-sheet';
 import axios from 'axios';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import {BASE_URL} from '@env';
 
@@ -39,7 +40,7 @@ const api = axios.create({
 
 class Modal extends Component {
   render() {
-    const {height, width} = Dimensions.get('window');
+    const {height, width} = Dimensions.get('screen');
     return (
       <View
         style={{
@@ -263,7 +264,12 @@ const SettingProfile = ({route, navigation}) => {
       .put('profile/cusername', payload, {
         headers: {'Content-Type': 'application/json'},
       })
-      .then(() => {
+      .then(async () => {
+        let item = await AsyncStorage.getItem('token');
+        item = await JSON.parse(item);
+        const newToken = {...item, username: Username};
+        await AsyncStorage.removeItem('token');
+        await AsyncStorage.setItem('token', JSON.stringify(newToken));
         getUserInfo();
         seteditUsername(false);
       })
@@ -602,6 +608,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   inputBox: {
+    width: '97%',
+    alignSelf: 'center',
     backgroundColor: '#ffffff',
     elevation: 6,
     borderRadius: 8,

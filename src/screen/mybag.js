@@ -19,7 +19,7 @@ import CardBag from '../components/card/cardBag';
 
 class Modal extends Component {
   render() {
-    const {height, width} = Dimensions.get('window');
+    const {height, width} = Dimensions.get('screen');
     return (
       <View
         style={{

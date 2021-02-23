@@ -41,7 +41,7 @@ import s from '../styles/detailStyle';
 
 class Modal extends Component {
   render() {
-    const {height, width} = Dimensions.get('window');
+    const {height, width} = Dimensions.get('screen');
     return (
       <View
         style={{
@@ -269,10 +269,10 @@ class detail extends Component {
       height: 60,
       color: '#000',
       border: 2,
-      radius: 5,
+      radius: 0,
       opacity: 0.2,
       x: 0,
-      y: -4,
+      y: -3,
       // style: {marginVertical: 5},
     };
     const {
@@ -282,6 +282,8 @@ class detail extends Component {
       product_price,
       product_sold,
       product_desc,
+      id_user,
+      user_name,
     } =
       this.props.product.isFulfilled &&
       this.props.product.singleProduct.product;
@@ -627,15 +629,16 @@ class detail extends Component {
                       backgroundColor: 'white',
                       paddingHorizontal: 15,
                       alignItems: 'center',
+                      elevation: 10,
                     }}>
                     <TouchableOpacity
+                      style={{width: '80%'}}
                       onPress={() => {
                         this.handleBag();
                       }}>
                       <View
                         style={{
                           height: 48,
-                          width: 300,
                           borderRadius: 25,
                           backgroundColor: '#DB3022',
                           justifyContent: 'center',
@@ -648,6 +651,10 @@ class detail extends Component {
                     <TouchableOpacity
                       onPress={() => {
                         ToastAndroid.show('redirect to chat', 0.0001);
+                        this.props.navigation.navigate('chat', {
+                          receiverName: user_name,
+                          receiverID: id_user,
+                        });
                       }}>
                       <View
                         style={{

@@ -18,6 +18,8 @@ import {
   Shop,
   SettingProfile,
   EditProduct,
+  Chat,
+  ChatList,
 } from './src/screen';
 
 import {SocketProvider} from './src/utils/context/SocketProvider';
@@ -84,6 +86,17 @@ export default class App extends Component {
               <Stack.Screen
                 name="detail"
                 component={Detail}
+                options={{headerShown: false}}
+              />
+
+              <Stack.Screen
+                name="chatlist"
+                component={ChatList}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="chat"
+                component={Chat}
                 options={{headerShown: false}}
               />
 
