@@ -67,11 +67,19 @@ class cardBag extends Component {
   };
 
   handleSelect = async () => {
-    const {size, color, product_price, id_product, index} = this.props;
+    const {
+      size,
+      color,
+      product_price,
+      id_product,
+      id_store,
+      index,
+    } = this.props;
     const prevData = JSON.parse(await AsyncStorage.getItem('checkout'));
     const dataItem = {
       indexof: index,
       product_id: id_product,
+      id_store: id_store,
       qty: this.state.number,
       color: color,
       size: size,

@@ -9,7 +9,6 @@ const addressList = StyleSheet.create({
   button: {
     alignItems: 'center',
     marginHorizontal: 16,
-    backgroundColor: '#fff',
     borderWidth: 1,
     paddingVertical: 14,
     borderRadius: 24,

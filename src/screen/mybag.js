@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  ToastAndroid,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {connect} from 'react-redux';
@@ -198,8 +199,8 @@ class mybag extends Component {
     const data =
       dataItem[0] !== undefined
         ? alasql(
-            'SELECT product_name, id_product, product_img, product_by, size, color, max_qty, product_price, SUM(CAST([item_qty] AS INT)) AS [item_qty] \
-          FROM ? GROUP BY id_product, product_img, product_by, product_name, size, color, max_qty, product_price',
+            'SELECT product_name, id_product, id_store, product_img, product_by, size, color, max_qty, product_price, SUM(CAST([item_qty] AS INT)) AS [item_qty] \
+          FROM ? GROUP BY id_product, id_store, product_img, product_by, product_name, size, color, max_qty, product_price',
             [dataItem],
           )
         : [];
@@ -307,6 +308,7 @@ class mybag extends Component {
                   (
                     {
                       product_name,
+                      id_store,
                       id_product,
                       product_img,
                       size,
@@ -322,6 +324,7 @@ class mybag extends Component {
                         key={index}
                         index={index}
                         product_name={product_name}
+                        id_store={id_store}
                         id_product={id_product}
                         product_img={product_img}
                         size={size}
@@ -360,8 +363,9 @@ class mybag extends Component {
             onPress={() => {
               // postHistory();
               // navigation.navigate('Success');
-              this.props.checkout.data[0] !== undefined &&
-                this.props.navigation.navigate('checkout');
+              this.props.checkout.data[0] !== undefined
+                ? this.props.navigation.navigate('checkout')
+                : ToastAndroid.show('Please select minimum 1 item', 0.0001);
             }}>
             <View style={s.btn}>
               <Text style={{color: '#fff'}}>CHECK OUT</Text>

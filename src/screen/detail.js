@@ -195,6 +195,7 @@ class detail extends Component {
 
   handleBag = async () => {
     const {
+      id_user,
       id_product,
       product_img,
       product_name,
@@ -207,6 +208,7 @@ class detail extends Component {
     const {color, size} = this.state;
     const prevData = JSON.parse(await AsyncStorage.getItem('belanjaUser'));
     const dataItem = {
+      id_store: id_user,
       product_img: product_img[0],
       product_name: product_name,
       product_by: product_by,

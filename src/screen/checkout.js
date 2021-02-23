@@ -44,9 +44,10 @@ export class Checkout extends Component {
     );
     let newData = [];
     await this.props.checkout.data.map(
-      ({product_id, color, size, qty, price}) => {
+      ({product_id, color, size, qty, price, id_store}) => {
         return payload.push({
           user_email: JSON.parse(token).email,
+          id_store: id_store,
           product_id: product_id,
           color: color,
           size: size,

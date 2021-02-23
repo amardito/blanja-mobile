@@ -71,18 +71,12 @@ export default connect()(CardCatalog);
 
 const styles = StyleSheet.create({
   container: {
+    alignSelf: 'center',
+    width: '95%',
+    backgroundColor: '#fff',
     flexDirection: 'row',
     marginTop: 20,
-  },
-  img: {
-    width: 104,
-    height: 104,
-    borderTopLeftRadius: 8,
-    borderBottomLeftRadius: 8,
-  },
-  infobag: {
-    backgroundColor: '#fff',
-    width: 220,
+    elevation: 8,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -90,9 +84,15 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.3,
     shadowRadius: 4.65,
-    elevation: 8,
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
+  img: {
+    width: 104,
+    height: 104,
+  },
+  infobag: {
     paddingHorizontal: 5,
-    borderBottomRightRadius: 8,
-    borderTopRightRadius: 8,
+    width: 220,
   },
 });
