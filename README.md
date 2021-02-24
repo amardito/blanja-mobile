@@ -21,10 +21,12 @@
 
 ### Screenshot
 
+<div align="center">
    <img width="25%" src="https://res.cloudinary.com/dl3spjhwz/image/upload/v1614159196/main_screen_dh4jtr.jpg">
    <img width="25%" src="https://res.cloudinary.com/dl3spjhwz/image/upload/v1614159196/shop_screen_jy4tqy.jpg">
    <img width="25%" src="https://res.cloudinary.com/dl3spjhwz/image/upload/v1614159196/detail_screen_aq4svx.jpg">
    <img width="25%" src="https://res.cloudinary.com/dl3spjhwz/image/upload/v1614159196/maybag_c7ixde.jpg">
+</div>
 
 ### Demo
 
