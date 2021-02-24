@@ -163,7 +163,7 @@ class ListProduct extends Component {
       store: JSON.parse(token).store,
     };
     axios
-      .post('http://192.168.1.2:1010/api/v1/myproducts', payload, {
+      .post('http://34.203.227.174:8000/api/v1/myproducts', payload, {
         headers: {
           'Content-Type': 'application/json',
         },
