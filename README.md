@@ -34,10 +34,10 @@
 
 ### Demo
 
-   This is Blanja Web build version, let's try it.
+   This is Blanja Mobile build version, let's try it.
    [Click Me](http://bit.ly/2ZR6t5z)
 
 ### Related Project
 
-   RESTful API for this web application, clone this for development.
+   RESTful API for this Mobile application, clone this for development.
    [Click Me](http://github.com/amardito/blanja-service)
