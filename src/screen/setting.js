@@ -164,6 +164,7 @@ const SettingProfile = ({route, navigation}) => {
   const [msgErr, setmsgErr] = useState('');
   const [Npassword, setNpassword] = useState('');
   const [Cpassword, setCpassword] = useState('');
+  const [Opassword, setOpassword] = useState('');
   const [focused, setfocused] = useState(false);
   const [username, setusername] = useState('loading ...');
   const [level, setlevel] = useState('2');
@@ -233,6 +234,7 @@ const SettingProfile = ({route, navigation}) => {
   const changePassword = () => {
     const payload = {
       email: email,
+      old_password: Opassword,
       password: Cpassword,
     };
     if (Cpassword === '' && Npassword === '') {
@@ -246,7 +248,11 @@ const SettingProfile = ({route, navigation}) => {
           ToastAndroid.show('Successfully Change Password', 0.0001);
           setmsgErr('');
         })
-        .catch(() => {
+        .catch((e) => {
+          console.log('\n\n', e.response.data, '\n\n');
+          if (e.response.data.message === 'Wrong Password') {
+            setmsgErr('Old Password is wrong');
+          }
           ToastAndroid.show('Failed Change Password', 0.0001);
         });
     } else {
@@ -430,7 +436,7 @@ const SettingProfile = ({route, navigation}) => {
       <ActionSheet
         ref={actionSheetRef}
         containerStyle={{
-          bottom: focused ? 260 : 0,
+          bottom: focused ? 200 : 0,
         }}>
         <TouchableWithoutFeedback
           onPress={() => setfocused(false)}
@@ -438,7 +444,7 @@ const SettingProfile = ({route, navigation}) => {
           <View
             style={{
               ...styles.form,
-              height: windowHeight * 0.5,
+              height: windowHeight * 0.6,
             }}>
             <Text
               style={{
@@ -449,6 +455,20 @@ const SettingProfile = ({route, navigation}) => {
               Change Password
             </Text>
             <Form>
+              <Item floatingLabel style={styles.inputBox}>
+                <Label style={styles.labelStyle} floatBack={5}>
+                  Old Password
+                </Label>
+                <Input
+                  secureTextEntry={true}
+                  style={styles.inputStyle}
+                  onChangeText={(e) => {
+                    setOpassword(e);
+                    setmsgErr('');
+                  }}
+                  onFocus={() => focused === false && setfocused(true)}
+                />
+              </Item>
               <Item floatingLabel style={styles.inputBox}>
                 <Label style={styles.labelStyle} floatBack={5}>
                   New Password
