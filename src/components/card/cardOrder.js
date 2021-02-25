@@ -7,7 +7,7 @@ const cardOrder = (props) => {
     <View style={styles.container}>
       <Image
         source={{
-          uri: 'http://34.203.227.174:8000' + props.img,
+          uri: 'http://52.205.93.228:8000' + props.img,
           width: 104,
           height: 120,
         }}
