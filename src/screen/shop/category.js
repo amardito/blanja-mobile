@@ -14,7 +14,7 @@ const Shop = ({navigation}) => {
   }, []);
   const getCategory = () => {
     axios
-      .get('http://34.203.227.174:8000/api/v1/category')
+      .get('http://52.205.93.228:8000/api/v1/category')
       .then(({data}) => {
         //console.log(data.data);
         setCategory(data.data);

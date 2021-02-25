@@ -123,7 +123,7 @@ class AddProduct extends React.Component {
     }
 
     axios
-      .post('http://34.203.227.174:8000/api/v1' + '/product/create', data, config)
+      .post('http://52.205.93.228:8000/api/v1' + '/product/create', data, config)
       .then(() => {
         showNotification('Notification', 'Add Product Success', channel);
         this.props.dispatch(getNewProductAction());

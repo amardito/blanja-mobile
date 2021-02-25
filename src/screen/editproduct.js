@@ -62,7 +62,7 @@ class EditProduct extends React.Component {
     const {itemId} = this.props.route.params;
 
     axios
-      .get('http://34.203.227.174:8000/api/v1' + `/product/${itemId}`)
+      .get('http://52.205.93.228:8000/api/v1' + `/product/${itemId}`)
       .then(({data}) => {
         const {product, color, size} = data.data;
         console.log('product', product);
@@ -154,7 +154,7 @@ class EditProduct extends React.Component {
 
     axios
       .put(
-        'http://34.203.227.174:8000/api/v1' + `/product/update/${itemId}`,
+        'http://52.205.93.228:8000/api/v1' + `/product/update/${itemId}`,
         data,
         config,
       )
@@ -489,7 +489,7 @@ class EditProduct extends React.Component {
                                 <Image
                                   key={index}
                                   source={{
-                                    uri: 'http://34.203.227.174:8000/' + item,
+                                    uri: 'http://52.205.93.228:8000/' + item,
                                   }}
                                   style={styles.imageStyle}
                                 />

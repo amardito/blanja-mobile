@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   Dimensions,
   ToastAndroid,
+  ActivityIndicator,
 } from 'react-native';
 import {
   Header,
@@ -373,7 +374,7 @@ class detail extends Component {
                       <View style={s.imageItems} key={index}>
                         <Image
                           source={{
-                            uri: `http://34.203.227.174:8000${value}`,
+                            uri: `http://52.205.93.228:8000${value}`,
                           }}
                           style={s.image}
                         />
@@ -683,13 +684,27 @@ class detail extends Component {
           <View
             style={{
               width: '100%',
-              height: 400,
-              flexDirection: 'row',
-              paddingLeft: 30,
+              paddingTop: 100,
             }}>
-            <Text style={{alignSelf: 'center', fontSize: 25}}>
-              Loading data ...
-            </Text>
+            <Image
+              source={require('../assets/Vector.png')}
+              style={{alignSelf: 'center', marginBottom: 20}}
+            />
+            <View
+              style={{
+                flexDirection: 'row',
+                alignSelf: 'center',
+                justifyContent: 'center',
+              }}>
+              <ActivityIndicator size={25} color={'#DB3022'} />
+              <Text
+                style={{
+                  fontSize: 25,
+                }}>
+                {' '}
+                Load Product ...
+              </Text>
+            </View>
           </View>
         )}
       </>

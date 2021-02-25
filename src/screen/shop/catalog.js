@@ -20,7 +20,9 @@ import ActionSheet from 'react-native-actions-sheet';
 const Catalog = ({navigation, route}) => {
   let {title, category, search, color, size, SortBy, Sort} = route.params;
   const [viewall, setViewall] = useState([]);
+  const [urlShowMore, seturlShowMore] = useState('');
   const [sortby, setsortby] = useState(SortBy);
+  const [sortHolder, setsortHolder] = useState('');
   const [sort, setsort] = useState(Sort);
   const [SelectedSort, setSelectedSort] = useState(
     sortby === 'popular' ? 1 : sortby === 'latest' && 2,
@@ -33,14 +35,28 @@ const Catalog = ({navigation, route}) => {
     getViewAll();
   }, [category, search, color, size, sortby, sort, SelectedSort]);
 
+  const showMore = (urlParam) => {
+    axios
+      .get(`http://52.205.93.228:8000${urlParam}`)
+      .then(({data}) => {
+        setViewall(viewall.concat(data.data.values));
+        seturlShowMore(data.data.pageInfo);
+        console.log('\n\n', data.data.pageInfo, '\n\n');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const getViewAll = () => {
     if (title === 'View All Items') {
       axios
         .get(
-          `http://34.203.227.174:8000/api/v1/search?name=&sortby=${sortby}&sort=${sort}`,
+          `http://52.205.93.228:8000/api/v1/search?name=&sortby=${sortby}&sort=${sort}`,
         )
         .then(({data}) => {
           setViewall(data.data.values);
+          seturlShowMore(data.data.pageInfo);
         })
         .catch((err) => {
           console.log(err);
@@ -48,10 +64,11 @@ const Catalog = ({navigation, route}) => {
     } else if (title === 'New' || title === 'Popular') {
       axios
         .get(
-          `http://34.203.227.174:8000/api/v1/search?name=&sortby=${sortby}&sort=${sort}`,
+          `http://52.205.93.228:8000/api/v1/search?name=&sortby=${sortby}&sort=${sort}`,
         )
         .then(({data}) => {
           setViewall(data.data.values);
+          seturlShowMore(data.data.pageInfo);
         })
         .catch((err) => {
           console.log(err);
@@ -59,10 +76,11 @@ const Catalog = ({navigation, route}) => {
     } else {
       axios
         .get(
-          `http://34.203.227.174:8000/api/v1/search?name=${search}&category=${category}&color=${color}&size=${size}&sortby=${sortby}&sort=${sort}`,
+          `http://52.205.93.228:8000/api/v1/search?name=${search}&category=${category}&color=${color}&size=${size}&sortby=${sortby}&sort=${sort}`,
         )
         .then(({data}) => {
           setViewall(data.data.values);
+          seturlShowMore(data.data.pageInfo);
         })
         .catch((err) => {
           console.log(err);
@@ -108,7 +126,9 @@ const Catalog = ({navigation, route}) => {
                 size={27}
               />
             </View>
-            <Text style={{fontSize: 15}}>Sort</Text>
+            <Text style={{fontSize: 15}}>
+              {sortHolder !== '' ? sortHolder : 'Sort'}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -139,6 +159,22 @@ const Catalog = ({navigation, route}) => {
                   );
                 },
               )}
+            {urlShowMore.page < urlShowMore.totalPage && (
+              <TouchableOpacity
+                onPress={() => showMore(urlShowMore.nextPage)}
+                style={{
+                  marginTop: 30,
+                  width: '80%',
+                  alignSelf: 'center',
+                  backgroundColor: '#DB3022',
+                  paddingVertical: 15,
+                }}>
+                <Text
+                  style={{fontSize: 16, alignSelf: 'center', color: '#fff'}}>
+                  Show More
+                </Text>
+              </TouchableOpacity>
+            )}
 
             <View style={styles.gap} />
           </ScrollView>
@@ -165,6 +201,7 @@ const Catalog = ({navigation, route}) => {
                 backgroundColor: SelectedSort === 1 ? '#DB3022' : '#fff',
               }}
               onPress={() => {
+                setsortHolder('Popular');
                 setsortby('popular');
                 setsort('DESC');
                 setSelectedSort(1);
@@ -184,6 +221,7 @@ const Catalog = ({navigation, route}) => {
                 backgroundColor: SelectedSort === 2 ? '#DB3022' : '#fff',
               }}
               onPress={() => {
+                setsortHolder('Newest');
                 setsortby('latest');
                 setsort('DESC');
                 setSelectedSort(2);
@@ -203,6 +241,7 @@ const Catalog = ({navigation, route}) => {
                 backgroundColor: SelectedSort === 3 ? '#DB3022' : '#fff',
               }}
               onPress={() => {
+                setsortHolder('Price: lowest to high');
                 setsortby('price');
                 setsort('ASC');
                 setSelectedSort(3);
@@ -222,6 +261,7 @@ const Catalog = ({navigation, route}) => {
                 backgroundColor: SelectedSort === 4 ? '#DB3022' : '#fff',
               }}
               onPress={() => {
+                setsortHolder('Price: highest to low');
                 setsortby('price');
                 setsort('DESC');
                 setSelectedSort(4);
